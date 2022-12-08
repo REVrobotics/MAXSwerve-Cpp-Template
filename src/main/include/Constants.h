@@ -55,10 +55,15 @@ constexpr int kRearRightTurningCanId = 16;
 
 namespace ModuleConstants {
 constexpr bool kTurningEncoderInverted = true;
+constexpr double kpinonTeeth = 14;  // adujust based off module ordered 
+constexpr double kmotorFreeSpeed =5676 /60;
 
 constexpr double kDrivingMotorReduction =
-    66.0 / 13.0;  // rotations of motor / rotations of output
+     990 / (kpinonTeeth * 15);
 constexpr units::meter_t kWheelDiameter = 0.0762_m;
+
+constexpr units::meter_t kWheelCircumference = kWheelDiameter * std::numbers::pi;
+
 constexpr double kDrivingEncoderPositionFactor =
     (kWheelDiameter.value() * std::numbers::pi) /
     (double)kDrivingMotorReduction;  // meters
@@ -76,10 +81,11 @@ constexpr units::radian_t kTurningEncoderPositionPIDMinInput = 0_rad;
 constexpr units::radian_t kTurningEncoderPositionPIDMaxInput =
     units::radian_t{kTurningEncoderPositionFactor};
 
+constexpr double kdriveTrainFreeSpeed = (kmotorFreeSpeed * kWheelCircumference.value())/kDrivingMotorReduction; //calculated motor free speed
 constexpr double kDrivingP = 0.04;
 constexpr double kDrivingI = 0;
 constexpr double kDrivingD = 0;
-constexpr double kDrivingFF = 0.22;
+constexpr double kDrivingFF = (1 / kdriveTrainFreeSpeed);
 constexpr double kDrivingMinOutput = -1;
 constexpr double kDrivingMaxOutput = 1;
 
