@@ -4,8 +4,6 @@
 
 #include "RobotContainer.h"
 
-#include <utility>
-
 #include <frc/controller/PIDController.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/shuffleboard/Shuffleboard.h>
@@ -17,6 +15,8 @@
 #include <frc2/command/button/JoystickButton.h>
 #include <units/angle.h>
 #include <units/velocity.h>
+
+#include <utility>
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
@@ -34,22 +34,21 @@ RobotContainer::RobotContainer() {
   // Turning is controlled by the X axis of the right stick.
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        m_drive.Drive(
-            -units::meters_per_second_t{frc::ApplyDeadband(m_driverController.GetLeftY(), 0.06)},
-            -units::meters_per_second_t{frc::ApplyDeadband(m_driverController.GetLeftX(), 0.06)},
-            -units::radians_per_second_t{frc::ApplyDeadband(m_driverController.GetRightX(), 0.06)}, true);
+        m_drive.Drive(-units::meters_per_second_t{frc::ApplyDeadband(
+                          m_driverController.GetLeftY(), 0.06)},
+                      -units::meters_per_second_t{frc::ApplyDeadband(
+                          m_driverController.GetLeftX(), 0.06)},
+                      -units::radians_per_second_t{frc::ApplyDeadband(
+                          m_driverController.GetRightX(), 0.06)},
+                      true);
       },
       {&m_drive}));
 }
 
 void RobotContainer::ConfigureButtonBindings() {
-    frc2::JoystickButton(&m_driverController, frc::XboxController::Button::kRightBumper)
-        .WhileTrue(
-            new frc2::RunCommand(
-                [this] {
-                    m_drive.SetX();
-                },
-                {&m_drive}));
+  frc2::JoystickButton(&m_driverController,
+                       frc::XboxController::Button::kRightBumper)
+      .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

@@ -2,17 +2,16 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
-#include <numbers>
-
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <numbers>
+#include <rev/CANSparkMax.h>
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
+#include <units/current.h>
 #include <units/length.h>
 #include <units/velocity.h>
-#include <units/current.h>
-#include <rev/CANSparkMax.h>
+
+#include <numbers>
 
 #pragma once
 
@@ -31,8 +30,10 @@ constexpr units::meters_per_second_t kMaxSpeed = 4.4_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
 /* Chassis configuration */
-constexpr units::meter_t kTrackWidth = 0.6731_m;  // Distance between centers of right and left wheels on robot
-constexpr units::meter_t kWheelBase = 0.6731_m;  // Distance between centers of front and back wheels on robot
+constexpr units::meter_t kTrackWidth =
+    0.6731_m;  // Distance between centers of right and left wheels on robot
+constexpr units::meter_t kWheelBase =
+    0.6731_m;  // Distance between centers of front and back wheels on robot
 
 // Angular offsets of the modules relative to the chassis in radians
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
@@ -55,18 +56,25 @@ constexpr int kRearRightTurningCanId = 16;
 namespace ModuleConstants {
 constexpr bool kTurningEncoderInverted = true;
 
-constexpr double kDrivingMotorReduction = 66.0 / 13.0; // rotations of motor / rotations of output
+constexpr double kDrivingMotorReduction =
+    66.0 / 13.0;  // rotations of motor / rotations of output
 constexpr units::meter_t kWheelDiameter = 0.0762_m;
-constexpr double kDrivingEncoderPositionFactor = (kWheelDiameter.value() * std::numbers::pi)
-    / (double) kDrivingMotorReduction; // meters
-constexpr double kDrivingEncoderVelocityFactor = ((kWheelDiameter.value() * std::numbers::pi)
-    / (double) kDrivingMotorReduction) / 60.0; // meters per second
+constexpr double kDrivingEncoderPositionFactor =
+    (kWheelDiameter.value() * std::numbers::pi) /
+    (double)kDrivingMotorReduction;  // meters
+constexpr double kDrivingEncoderVelocityFactor =
+    ((kWheelDiameter.value() * std::numbers::pi) /
+     (double)kDrivingMotorReduction) /
+    60.0;  // meters per second
 
-constexpr double kTurningEncoderPositionFactor = (2 * std::numbers::pi); // radians
-constexpr double kTurningEncoderVelocityFactor = (2 * std::numbers::pi) / 60.0; // radians per second
+constexpr double kTurningEncoderPositionFactor =
+    (2 * std::numbers::pi);  // radians
+constexpr double kTurningEncoderVelocityFactor =
+    (2 * std::numbers::pi) / 60.0;  // radians per second
 
 constexpr units::radian_t kTurningEncoderPositionPIDMinInput = 0_rad;
-constexpr units::radian_t kTurningEncoderPositionPIDMaxInput = units::radian_t{kTurningEncoderPositionFactor};
+constexpr units::radian_t kTurningEncoderPositionPIDMaxInput =
+    units::radian_t{kTurningEncoderPositionFactor};
 
 constexpr double kDrivingP = 0.04;
 constexpr double kDrivingI = 0;
@@ -82,8 +90,10 @@ constexpr double kTurningFF = 0;
 constexpr double kTurningMinOutput = -1;
 constexpr double kTurningMaxOutput = 1;
 
-constexpr rev::CANSparkMax::IdleMode kDrivingMotorIdleMode = rev::CANSparkMax::IdleMode::kBrake;
-constexpr rev::CANSparkMax::IdleMode kTurningMotorIdleMode = rev::CANSparkMax::IdleMode::kBrake;
+constexpr rev::CANSparkMax::IdleMode kDrivingMotorIdleMode =
+    rev::CANSparkMax::IdleMode::kBrake;
+constexpr rev::CANSparkMax::IdleMode kTurningMotorIdleMode =
+    rev::CANSparkMax::IdleMode::kBrake;
 
 constexpr units::ampere_t kDrivingMotorCurrentLimit = 50_A;
 constexpr units::ampere_t kTurningMotorCurrentLimit = 20_A;
