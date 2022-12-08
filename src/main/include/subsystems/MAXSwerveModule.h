@@ -4,22 +4,9 @@
 
 #pragma once
 
-#include <numbers>
-
-#include <frc/Encoder.h>
-#include <frc/controller/PIDController.h>
-#include <frc/controller/ProfiledPIDController.h>
-#include <frc/controller/SimpleMotorFeedforward.h>
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
-#include <frc/motorcontrol/PWMSparkMax.h>
-#include <units/angular_velocity.h>
-#include <units/angle.h>
-#include <units/length.h>
-#include <units/time.h>
-#include <units/velocity.h>
-#include <units/voltage.h>
 #include <rev/CANSparkMax.h>
 #include <rev/SparkMaxRelativeEncoder.h>
 #include <rev/SparkMaxAbsoluteEncoder.h>
