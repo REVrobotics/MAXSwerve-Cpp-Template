@@ -16,7 +16,7 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
                                  const double chassisAngularOffset)
     : m_drivingSparkMax(drivingCANId, rev::CANSparkMax::MotorType::kBrushless),
       m_turningSparkMax(turningCANId, rev::CANSparkMax::MotorType::kBrushless) {
-  // Factory reset so we get the SPARKS MAX to a known state before configuring
+  // Factory reset, so we get the SPARKS MAX to a known state before configuring
   // them. This is useful in case a SPARK MAX is swapped out.
   m_drivingSparkMax.RestoreFactoryDefaults();
   m_turningSparkMax.RestoreFactoryDefaults();
@@ -35,8 +35,8 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
   m_turningAbsoluteEncoder.SetVelocityConversionFactor(
       kTurningEncoderVelocityFactor);
 
-  // Invert the turning encoder since the output shaft is inverse of the motor
-  // in the MAXSwerve Module.
+  // Invert the turning encoder, since the output shaft rotates in the opposite
+  // direction of the steering motor in the MAXSwerve Module.
   m_turningAbsoluteEncoder.SetInverted(kTurningEncoderInverted);
 
   // Enable PID wrap around for the turning motor. This will allow the PID
@@ -49,7 +49,7 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
   m_turningPIDController.SetPositionPIDWrappingMaxInput(
       kTurningEncoderPositionPIDMaxInput.value());
 
-  // Set the PID gains for the driving motor. Note these are example gains and
+  // Set the PID gains for the driving motor. Note these are example gains, and
   // you may need to tune them for your own robot!
   m_drivingPIDController.SetP(kDrivingP);
   m_drivingPIDController.SetI(kDrivingI);
@@ -57,7 +57,7 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
   m_drivingPIDController.SetFF(kDrivingFF);
   m_drivingPIDController.SetOutputRange(kDrivingMinOutput, kDrivingMaxOutput);
 
-  // Set the PID gains for the turning motor. Note these are example gains and
+  // Set the PID gains for the turning motor. Note these are example gains, and
   // you may need to tune them for your own robot!
   m_turningPIDController.SetP(kTurningP);
   m_turningPIDController.SetI(kTurningI);
