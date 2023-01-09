@@ -65,11 +65,12 @@ constexpr bool kTurningEncoderInverted = true;
 constexpr double kDrivingMotorPinionTeeth = 14;
 
 // Calculations required for driving motor conversion factors and feed forward
-constexpr double kDrivingMotorFreeSpeedRps = 5676 / 60;
-constexpr double kDrivingMotorReduction = 990 / (kDrivingMotorPinionTeeth * 15);
+constexpr double kDrivingMotorFreeSpeedRps = 5676.0 / 60; // NEO free speed is 5676 RPM
 constexpr units::meter_t kWheelDiameter = 0.0762_m;
 constexpr units::meter_t kWheelCircumference =
     kWheelDiameter * std::numbers::pi;
+// 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
+constexpr double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
 constexpr double kDriveWheelFreeSpeedRps =
     (kDrivingMotorFreeSpeedRps * kWheelCircumference.value()) /
     kDrivingMotorReduction;
