@@ -72,10 +72,10 @@ constexpr double kDriveTrainFreeSpeed =
 
 constexpr double kDrivingEncoderPositionFactor =
     (kWheelDiameter.value() * std::numbers::pi) /
-    (double)kDrivingMotorReduction;  // meters
+    kDrivingMotorReduction;  // meters
 constexpr double kDrivingEncoderVelocityFactor =
     ((kWheelDiameter.value() * std::numbers::pi) /
-     (double)kDrivingMotorReduction) /
+     kDrivingMotorReduction) /
     60.0;  // meters per second
 
 constexpr double kTurningEncoderPositionFactor =
