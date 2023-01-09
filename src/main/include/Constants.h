@@ -55,22 +55,25 @@ constexpr int kRearRightTurningCanId = 16;
 }  // namespace DriveConstants
 
 namespace ModuleConstants {
-// Invert the turning encoder, since the output shaft rotates in the opposite direction of
-// the steering motor in the MAXSwerve Module.
+// Invert the turning encoder, since the output shaft rotates in the opposite
+// direction of the steering motor in the MAXSwerve Module.
 constexpr bool kTurningEncoderInverted = true;
 
-// The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
-// This changes the drive speed of the module (a pinion gear with more teeth will result in a
-// robot that drives faster).
+// The MAXSwerve module can be configured with one of three pinion gears: 12T,
+// 13T, or 14T. This changes the drive speed of the module (a pinion gear with
+// more teeth will result in a robot that drives faster).
 constexpr double kDrivingMotorPinionTeeth = 14;
 
 // Calculations required for driving motor conversion factors and feed forward
-constexpr double kDrivingMotorFreeSpeedRps = 5676.0 / 60; // NEO free speed is 5676 RPM
+constexpr double kDrivingMotorFreeSpeedRps =
+    5676.0 / 60;  // NEO free speed is 5676 RPM
 constexpr units::meter_t kWheelDiameter = 0.0762_m;
 constexpr units::meter_t kWheelCircumference =
     kWheelDiameter * std::numbers::pi;
-// 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15 teeth on the bevel pinion
-constexpr double kDrivingMotorReduction = (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
+// 45 teeth on the wheel's bevel gear, 22 teeth on the first-stage spur gear, 15
+// teeth on the bevel pinion
+constexpr double kDrivingMotorReduction =
+    (45.0 * 22) / (kDrivingMotorPinionTeeth * 15);
 constexpr double kDriveWheelFreeSpeedRps =
     (kDrivingMotorFreeSpeedRps * kWheelCircumference.value()) /
     kDrivingMotorReduction;
@@ -79,8 +82,7 @@ constexpr double kDrivingEncoderPositionFactor =
     (kWheelDiameter.value() * std::numbers::pi) /
     kDrivingMotorReduction;  // meters
 constexpr double kDrivingEncoderVelocityFactor =
-    ((kWheelDiameter.value() * std::numbers::pi) /
-     kDrivingMotorReduction) /
+    ((kWheelDiameter.value() * std::numbers::pi) / kDrivingMotorReduction) /
     60.0;  // meters per second
 
 constexpr double kTurningEncoderPositionFactor =
