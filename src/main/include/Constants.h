@@ -55,6 +55,8 @@ constexpr int kRearRightTurningCanId = 16;
 }  // namespace DriveConstants
 
 namespace ModuleConstants {
+// Invert the turning encoder, since the output shaft rotates in the opposite direction of
+// the steering motor in the MAXSwerve Module.
 constexpr bool kTurningEncoderInverted = true;
 
 // Calculations required for driving motor conversion factors and feed forward

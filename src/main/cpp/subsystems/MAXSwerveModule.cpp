@@ -35,8 +35,8 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
   m_turningAbsoluteEncoder.SetVelocityConversionFactor(
       kTurningEncoderVelocityFactor);
 
-  // Invert the turning encoder since the output shaft is inverse of the motor
-  // in the MAXSwerve Module.
+  // Invert the turning encoder, since the output shaft rotates in the opposite
+  // direction of the steering motor in the MAXSwerve Module.
   m_turningAbsoluteEncoder.SetInverted(kTurningEncoderInverted);
 
   // Enable PID wrap around for the turning motor. This will allow the PID
