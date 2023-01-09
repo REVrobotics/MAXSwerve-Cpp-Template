@@ -59,10 +59,14 @@ namespace ModuleConstants {
 // the steering motor in the MAXSwerve Module.
 constexpr bool kTurningEncoderInverted = true;
 
+// The MAXSwerve module can be configured with one of three pinion gears: 12T, 13T, or 14T.
+// This changes the drive speed of the module (a pinion gear with more teeth will result in a
+// robot that drives faster).
+constexpr double kDrivingMotorPinionTeeth = 14;
+
 // Calculations required for driving motor conversion factors and feed forward
-constexpr double kPinionTeeth = 14;  // Adjust this to match your configuration!
 constexpr double kDrivingMotorFreeSpeedRps = 5676 / 60;
-constexpr double kDrivingMotorReduction = 990 / (kPinionTeeth * 15);
+constexpr double kDrivingMotorReduction = 990 / (kDrivingMotorPinionTeeth * 15);
 constexpr units::meter_t kWheelDiameter = 0.0762_m;
 constexpr units::meter_t kWheelCircumference =
     kWheelDiameter * std::numbers::pi;
