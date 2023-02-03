@@ -1,6 +1,6 @@
 # MAXSwerve C++ Template Changelog
 
-## [Unreleased]
+## [2023.1] - 2023-02-03
 
 ### Added
 
@@ -10,6 +10,6 @@
 
 - Turning SPARK MAX not using the correct feedback device.
 
-## [1.0] - 2023-01-18
+## [2023.0] - 2023-01-18
 
 Initial release of MAXSwerve robot project.
