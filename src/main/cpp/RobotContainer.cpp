@@ -34,13 +34,14 @@ RobotContainer::RobotContainer() {
   // Turning is controlled by the X axis of the right stick.
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        m_drive.Drive(-units::meters_per_second_t{frc::ApplyDeadband(
-                          m_driverController.GetLeftY(), 0.06)},
-                      -units::meters_per_second_t{frc::ApplyDeadband(
-                          m_driverController.GetLeftX(), 0.06)},
-                      -units::radians_per_second_t{frc::ApplyDeadband(
-                          m_driverController.GetRightX(), 0.06)},
-                      true);
+        m_drive.Drive(
+            -units::meters_per_second_t{frc::ApplyDeadband(
+                m_driverController.GetLeftY(), OIConstants::kDriveDeadband)},
+            -units::meters_per_second_t{frc::ApplyDeadband(
+                m_driverController.GetLeftX(), OIConstants::kDriveDeadband)},
+            -units::radians_per_second_t{frc::ApplyDeadband(
+                m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
+            true, true);
       },
       {&m_drive}));
 }
@@ -95,5 +96,6 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   return new frc2::SequentialCommandGroup(
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
-          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }, {}));
+          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); },
+          {}));
 }

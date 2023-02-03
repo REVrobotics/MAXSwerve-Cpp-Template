@@ -30,6 +30,10 @@ namespace DriveConstants {
 constexpr units::meters_per_second_t kMaxSpeed = 4.8_mps;
 constexpr units::radians_per_second_t kMaxAngularSpeed{2 * std::numbers::pi};
 
+constexpr double kDirectionSlewRate = 1.2;   // radians per second
+constexpr double kMagnitudeSlewRate = 1.8;   // percent per second (1 = 100%)
+constexpr double kRotationalSlewRate = 2.0;  // percent per second (1 = 100%)
+
 // Chassis configuration
 constexpr units::meter_t kTrackWidth =
     0.6731_m;  // Distance between centers of right and left wheels on robot
@@ -133,4 +137,5 @@ extern const frc::TrapezoidProfile<units::radians>::Constraints
 
 namespace OIConstants {
 constexpr int kDriverControllerPort = 0;
+constexpr double kDriveDeadband = 0.05;
 }  // namespace OIConstants
