@@ -1,4 +1,8 @@
-# MAXSwerve C++ Template
+# MAXSwerve C++ Template v2023.1
+
+See [the online changelog](https://github.com/REVrobotics/MAXSwerve-Cpp-Template/blob/main/CHANGELOG.md) for information about updates to the template that may have been released since you created your project.
+
+## Description
 
 A template project for an FRC swerve drivetrain that uses REV MAXSwerve Modules.
 
