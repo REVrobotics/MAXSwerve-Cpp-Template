@@ -4,10 +4,11 @@
 
 #pragma once
 
-#include <frc/XboxController.h>
+// #include <frc/XboxController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/smartdashboard/SendableChooser.h>
+#include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/Command.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/PIDCommand.h>
@@ -32,8 +33,20 @@ class RobotContainer {
 
  private:
   // The driver's controller
-  frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
-  // frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
+  frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
+
+  // The operator's controller
+  frc2::CommandXboxController m_operatorController{OIConstants::kDriverControllerPort};
+
+  // Left stick controls shooter "out" (forward Y) and "in" (backward Y)
+
+  // Right stick controls intake raise (backward Y) and lower (forward Y)
+
+  // Left bumper controls intake "in"
+  frc2::Trigger m_operatorLeftBumper m_operatorController.LeftBumper();
+
+  // Right bumper controls intoke "out"
+  frc2::Triger m_operatorRightBumper m_operatorController.RightBumper();
 
   // The robot's subsystems and commands are defined here...
 
