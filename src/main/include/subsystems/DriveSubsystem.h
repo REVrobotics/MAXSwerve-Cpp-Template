@@ -5,6 +5,7 @@
 #pragma once
 
 #include <frc/ADIS16470_IMU.h>
+#include <AHRS.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
@@ -112,6 +113,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
 
   // The gyro sensor
   frc::ADIS16470_IMU m_gyro;
+  
+  // NavX gyro
+  AHRS navx_gyro;
+
 
   // Slew rate filter variables for controlling lateral acceleration
   double m_currentRotation = 0.0;

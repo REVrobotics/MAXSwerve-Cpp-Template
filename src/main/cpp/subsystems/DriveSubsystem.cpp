@@ -164,6 +164,7 @@ void DriveSubsystem::ZeroHeading() { m_gyro.Reset(); }
 
 double DriveSubsystem::GetTurnRate() {
   return -m_gyro.GetRate(frc::ADIS16470_IMU::IMUAxis::kZ).value();
+  // return -navx_gyro.GetRate;
 }
 
 frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }
