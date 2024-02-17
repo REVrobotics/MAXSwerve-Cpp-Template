@@ -1,6 +1,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
+#include <rev/CANSparkMax.h>
 
 #include "Constants.h"
 
@@ -8,7 +9,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
  public:
   IntakeSubsystem();
 
-  // Subsystem methods go here.
+  // Subsystem method declarations go here.
 
   /**
    * Example: Do the thing
@@ -29,11 +30,11 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // frc2::Trigger m_operatorLeftBumper m_operatorController.LeftBumper();
 
   // Right bumper controls intoke "out" - out while pressed?
-  // frc2::Triger m_operatorRightBumper m_operatorController.RightBumper();
+  // frc2::Trigger m_operatorRightBumper m_operatorController.RightBumper();
 
   // Intake raise/lower motor
-  // tbd
+  CANSparkMax m_intakeRaiseLowerMotor;
 
   // Intake roller motor
-  // tbd
+  CANSparkMax m_intakeRollerMotor;
 };

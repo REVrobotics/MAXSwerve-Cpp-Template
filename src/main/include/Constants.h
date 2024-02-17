@@ -140,3 +140,14 @@ namespace OIConstants {
     constexpr int kOperatorControllerPort = 1;
     constexpr double kDriveDeadband = 0.05;
 }  // namespace OIConstants
+
+namespace IntakeSubsystemConstants {
+    // TODO - set actual CAN IDs
+    constexpr int kIntakeRaiseLowerCANId = 99;
+    constexpr int kIntakeRollerCANId = 98;
+}
+
+namespace ShooterSubsystemConstants {
+    // TODO - Set actual CAN ID
+    constexpr int kShooterCANId = 97;
+}

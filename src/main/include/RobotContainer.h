@@ -17,6 +17,8 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/IntakeSubsystem.h"
+#include "subsystems/ShooterSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -45,15 +47,17 @@ class RobotContainer {
   // double frc::XboxController::GetRightY	(		)	const
 
   // Left bumper controls intake "in" - in while pressed?
-  frc2::Trigger m_operatorLeftBumper m_operatorController.LeftBumper();
+  frc2::Trigger m_operatorLeftBumper = m_operatorController.LeftBumper();
 
   // Right bumper controls intoke "out" - out while pressed?
-  frc2::Triger m_operatorRightBumper m_operatorController.RightBumper();
+  frc2::Trigger m_operatorRightBumper = m_operatorController.RightBumper();
 
   // The robot's subsystems and commands are defined here...
 
   // The robot's subsystems
   DriveSubsystem m_drive;
+  IntakeSubsystem m_intake;
+  ShooterSubsystem m_shooter;
 
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;
