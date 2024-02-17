@@ -4,9 +4,9 @@
 
 #pragma once
 
-// #include <frc/XboxController.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
+#include <frc/Joystick.h>
 #include <frc/smartdashboard/SendableChooser.h>
 #include <frc2/command/button/CommandXboxController.h>
 #include <frc2/command/Command.h>
@@ -37,7 +37,7 @@ class RobotContainer {
   // The driver's controller
   frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
 
-  // The operator's controller
+  // The operator's controller - was called m_shooterController, but also controls intake
   frc2::CommandXboxController m_operatorController{OIConstants::kDriverControllerPort};
 
   // Left stick controls shooter "out" (forward Y) and "in" (backward Y)
@@ -51,6 +51,11 @@ class RobotContainer {
 
   // Right bumper controls intoke "out" - out while pressed?
   frc2::Trigger m_operatorRightBumper = m_operatorController.RightBumper();
+
+  // When set the robot goes at full throttle.  When clear full throttle is scaled down by
+  // Should be k constants
+  int TurboEnabled;
+  int throttle_percentage;
 
   // The robot's subsystems and commands are defined here...
 
