@@ -39,13 +39,15 @@ class RobotContainer {
   frc2::CommandXboxController m_operatorController{OIConstants::kDriverControllerPort};
 
   // Left stick controls shooter "out" (forward Y) and "in" (backward Y)
+  // double frc::XboxController::GetLeftY	(		)	const
 
   // Right stick controls intake raise (backward Y) and lower (forward Y)
+  // double frc::XboxController::GetRightY	(		)	const
 
-  // Left bumper controls intake "in"
+  // Left bumper controls intake "in" - in while pressed?
   frc2::Trigger m_operatorLeftBumper m_operatorController.LeftBumper();
 
-  // Right bumper controls intoke "out"
+  // Right bumper controls intoke "out" - out while pressed?
   frc2::Triger m_operatorRightBumper m_operatorController.RightBumper();
 
   // The robot's subsystems and commands are defined here...
