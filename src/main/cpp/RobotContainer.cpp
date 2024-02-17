@@ -34,13 +34,16 @@ RobotContainer::RobotContainer() {
   // Turning is controlled by the X axis of the right stick.
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
+        TurboEnabled = m_driverController.GetRawAxis(3);
+        if (TurboEnabled) throttle_percentage = OIConstants::kTurboThrottlePercentage;
+        else throttle_percentage = 1;
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetLeftY(), OIConstants::kDriveDeadband)},
+                m_driverController.GetY() * 0.3 , OIConstants::kDriveDeadband)},
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetLeftX(), OIConstants::kDriveDeadband)},
+                m_driverController.GetX()  * 0.3, OIConstants::kDriveDeadband)},
             -units::radians_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetRightX(), OIConstants::kDriveDeadband)},
+                m_driverController.GetTwist() * 0.3, OIConstants::kDriveDeadband)},
             true, true);
       },
       {&m_drive}));

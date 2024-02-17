@@ -5,6 +5,7 @@
 #pragma once
 
 #include <frc/XboxController.h>
+#include <frc/Joystick.h>
 #include <frc/controller/PIDController.h>
 #include <frc/controller/ProfiledPIDController.h>
 #include <frc/smartdashboard/SendableChooser.h>
@@ -32,7 +33,13 @@ class RobotContainer {
 
  private:
   // The driver's controller
-  frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
+  frc::XboxController m_shooterController{OIConstants::kShooterControllerPort};
+  frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
+
+  // When set the robot goes at full throttle.  When clear full throttle is scaled down by
+  int TurboEnabled;
+
+  int throttle_percentage;
 
   // The robot's subsystems and commands are defined here...
 
