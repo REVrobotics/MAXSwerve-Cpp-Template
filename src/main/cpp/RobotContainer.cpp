@@ -39,11 +39,11 @@ RobotContainer::RobotContainer() {
         else throttle_percentage = 1;
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetY() * 0.3 , OIConstants::kDriveDeadband)},
+                m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetX()  * 0.3, OIConstants::kDriveDeadband)},
+                m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
             -units::radians_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetTwist() * 0.3, OIConstants::kDriveDeadband)},
+                m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
             true, true);
       },
       {&m_drive}));
@@ -66,10 +66,15 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
       frc::Pose2d{0_m, 0_m, 0_deg},
-      // Pass through these two interior waypoints, making an 's' curve path
-      {frc::Translation2d{1_m, 1_m}, frc::Translation2d{2_m, -1_m}},
-      // End 3 meters straight ahead of where we started, facing forward
-      frc::Pose2d{3_m, 0_m, 0_deg},
+
+      // WF- Keeping this example waypoint code in case we need to use something like
+      // this in the future.  It is completely useless for now since we want to move in a 
+      // straight line
+      {frc::Translation2d{0.25_m, 0_m}, frc::Translation2d{0.75_m, 0_m}},
+      
+      // End 1 meter from where we started.  This is enough distance to exit the starting zone and 
+      // earn some points
+      frc::Pose2d{1_m, 0_m, 0_deg},
       // Pass the config
       config);
 
