@@ -137,8 +137,20 @@ extern const frc::TrapezoidProfile<units::radians>::Constraints
 }  // namespace AutoConstants
 
 namespace OIConstants {
-constexpr int kDriverControllerPort = 0;
-constexpr int kShooterControllerPort = 1;
-constexpr double kDriveDeadband = 0.05;
-constexpr int kTurboThrottlePercentage = 0.5;
+    constexpr int kDriverControllerPort = 0;
+    // Was named kShooterControllerPort, but this controller also controls intake
+    constexpr int kOperatorControllerPort = 1;
+    constexpr double kDriveDeadband = 0.05;
+    constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
+
+namespace IntakeSubsystemConstants {
+    // TODO - set actual CAN IDs
+    constexpr int kIntakeRaiseLowerCANId = 99;
+    constexpr int kIntakeRollerCANId = 98;
+}
+
+namespace ShooterSubsystemConstants {
+    // TODO - Set actual CAN ID
+    constexpr int kShooterCANId = 97;
+}
