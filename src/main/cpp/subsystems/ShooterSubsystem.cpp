@@ -2,7 +2,7 @@
 #include "Constants.h"
 
 ShooterSubsystem::ShooterSubsystem() {
-  m_shooterMotor = new CANSparkMax(ShooterSubsystemConstants::kShooterCANId);
+  m_shooterMotor = CANSparkMax(ShooterSubsystemConstants::kShooterCANId);
 }
 
 void ShooterSubsystem::Periodic(){

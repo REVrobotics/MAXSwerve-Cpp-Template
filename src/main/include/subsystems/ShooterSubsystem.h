@@ -26,5 +26,5 @@ class ShooterSubsystem : public frc2::SubsystemBase {
   // double m_operatorController.GetLeftY(	)
 
   // Shooter motor
-  // tbd
+  CANSparkMax m_shooterMotor;
 };

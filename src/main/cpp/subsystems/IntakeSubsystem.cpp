@@ -2,8 +2,8 @@
 #include "Constants.h"
 
 IntakeSubsystem::IntakeSubsystem() {
-  m_intakeRaiseLowerMotor = new CANSparkMax(IntakeSubsystemConstants::kIntakeRaiseLowerCANId);
-  m_intakeRollerMotor = new CANSparkMax(IntakeSubsystemConstants::kIntakeRollerCANId);
+  m_intakeRaiseLowerMotor = CANSparkMax(IntakeSubsystemConstants::kIntakeRaiseLowerCANId);
+  m_intakeRollerMotor = CANSparkMax(IntakeSubsystemConstants::kIntakeRollerCANId);
 }
 
 void IntakeSubsystem::Periodic(){
