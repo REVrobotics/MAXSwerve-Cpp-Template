@@ -33,8 +33,10 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // frc2::Trigger m_operatorRightBumper m_operatorController.RightBumper();
 
   // Intake raise/lower motor
-  CANSparkMax m_intakeRaiseLowerMotor;
-
+  // TODO: Change kBrushless / kBrushed to match actual motors used
+  rev::CANSparkMax m_intakeRaiseLowerMotor{IntakeSubsystemConstants::kIntakeRaiseLowerCANId,
+                                             rev::CANSparkLowLevel::MotorType::kBrushless};
   // Intake roller motor
-  CANSparkMax m_intakeRollerMotor;
+  rev::CANSparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
+                                             rev::CANSparkLowLevel::MotorType::kBrushless};
 };

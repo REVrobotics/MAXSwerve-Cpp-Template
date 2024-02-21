@@ -1,10 +1,9 @@
+#include <rev/CANSparkMax.h>
+#include <rev/CANSparkLowLevel.h>
 #include "subsystems/IntakeSubsystem.h"
 #include "Constants.h"
 
-IntakeSubsystem::IntakeSubsystem() {
-  m_intakeRaiseLowerMotor = CANSparkMax(IntakeSubsystemConstants::kIntakeRaiseLowerCANId);
-  m_intakeRollerMotor = CANSparkMax(IntakeSubsystemConstants::kIntakeRollerCANId);
-}
+IntakeSubsystem::IntakeSubsystem(){};
 
 void IntakeSubsystem::Periodic(){
     // If right stick Y axis is pressed back, raise intake
