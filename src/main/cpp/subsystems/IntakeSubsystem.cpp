@@ -7,14 +7,16 @@
 
 IntakeSubsystem::IntakeSubsystem(){};
 
-// Need to initialize encode position to 0 on startup
+// Need to initialize encoder position to 0 on startup
 
 void IntakeSubsystem::setIntakePosition(double position){
-      // If encoder position has not met target rotations yet, drive motor
-      double k_intakeRaiseLowerMotorSpeed = 0.1;
-      double k_positionFudge = 0.05;
+      # If encoder position has not met target rotations yet, drive motor
+      static constexpr double k_intakeRaiseLowerMotorSpeed = 0.1;
+      static constexpr double k_positionFudge = 0.05;
 
-      double intakeRaiseLowerValue = IntakeSubsystem::m_intakeRaiseLowerEncoder.GetPosition();
+      double intakeRaiseLowerValue = m_intakeRaiseLowerEncoder.GetPosition();
+      // If there's a change in direction, we need to at least stop, then reverse - 
+      //   slow & reverse is even better 
       if(intakeRaiseLowerValue < (position - k_positionFudge))
       {
         m_intakeRaiseLowerMotor.Set(k_intakeRaiseLowerMotorSpeed);
@@ -25,7 +27,6 @@ void IntakeSubsystem::setIntakePosition(double position){
       {
         m_intakeRaiseLowerMotor.StopMotor();
       }
-
 }
 
 void IntakeSubsystem::Periodic(){
@@ -46,13 +47,21 @@ void IntakeSubsystem::Periodic(){
   // If right bumper is pressed once, activate intake "out" direction
   // If right bumper is pressed once, stop intake "out" direction
   // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+ 
+  // If we're reversing direction, we need to slow down, stop, and speed up in reverse
   if (m_operatorController.GetLeftBumperPressed())
   {
-    m_rollerMotorDirection = -1;
+    if (m_rollerMotorDirection != -1){
+      m_intakeRollerMotor.StopMotor(); // Avoid sharp reverse in direction
+      m_rollerMotorDirection = -1;
+    }  
     m_rollerMotorOn = !m_rollerMotorOn; // Toggle motor on/off
   } else if (m_operatorController.GetRightBumperPressed)
   {
-    m_rollerMotorDirection = 1;
+    if (m_rollerMotorDirection != 1){
+      m_intakeRollerMotor.StopMotor(); // Avoid sharp reverse in direction
+      m_rollerMotorDirection = 1;
+    }  
     m_rollerMotorOn = !m_rollerMotorOn;
   }
   if (m_rollerMotorOn)

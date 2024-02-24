@@ -2,7 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
-#include <rev/SparkRelativeEncoder.h>
+#include <rev/SparkMaxRelativeEncoder.h>
 
 #include "Constants.h"
 
@@ -11,8 +11,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   IntakeSubsystem();
 
   // Subsystem method declarations go here.
-  void IntakeSubsystem::setIntakePosition(double position);
-
+  void setIntakePosition(double position);
+  
   // This method is called periodically by the CommandScheduler
   void Periodic() override;
 
@@ -32,7 +32,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Intake raise/lower motor
   rev::CANSparkMax m_intakeRaiseLowerMotor{IntakeSubsystemConstants::kIntakeRaiseLowerCANId,
                                              rev::CANSparkLowLevel::MotorType::kBrushless};
-  rev::SparkRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder();
+  rev::SparkMaxRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder();
 
   // Intake roller motor
   rev::CANSparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
@@ -40,12 +40,15 @@ class IntakeSubsystem : public frc2::SubsystemBase {
                           
   // Deployed intake position value from encoder
   // TODO - determine correct value
-  constexpr double k_intakeDeployedPosition = 1.0;
+  static constexpr double k_intakeDeployedPosition = 1.0;
 
   // Retracted intake position value from encoder
   // TODO - determine correct value
-  constexpr double k_intakeRetractedPosition = 0.0;
+  static constexpr double k_intakeRetractedPosition = 0.0;
+
+  static constexpr double k_rollerMotorSpeed = 0.25;
 
   bool m_rollerMotorOn = false;
   int m_rollerMotorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+
 };
