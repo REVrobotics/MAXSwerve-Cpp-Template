@@ -2,6 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
+#include <SparkRelativeEncoder.h>
 
 #include "Constants.h"
 
@@ -33,10 +34,19 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // frc2::Trigger m_operatorRightBumper m_operatorController.RightBumper();
 
   // Intake raise/lower motor
-  // TODO: Change kBrushless / kBrushed to match actual motors used
   rev::CANSparkMax m_intakeRaiseLowerMotor{IntakeSubsystemConstants::kIntakeRaiseLowerCANId,
                                              rev::CANSparkLowLevel::MotorType::kBrushless};
+  rev::SparkRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder();
+
   // Intake roller motor
   rev::CANSparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
                                              rev::CANSparkLowLevel::MotorType::kBrushless};
+                          
+  // Deployed intake position value from encoder
+  // TODO - determine correct value
+  const double k_intakeDeployedPosition = 1.0;
+
+  // Retracted intake position value from encoder
+  // TODO - determine correct value
+  const double k_intakeRetractedPosition = 0.0;
 };
