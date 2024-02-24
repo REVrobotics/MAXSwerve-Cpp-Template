@@ -54,7 +54,7 @@ class RobotContainer {
 
   // When set the robot goes at full throttle.  When clear full throttle is scaled down by
   // Should be k constants
-  int TurboEnabled;
+  double button3_result;
   int throttle_percentage;
 
   // The robot's subsystems and commands are defined here...

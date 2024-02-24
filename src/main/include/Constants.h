@@ -47,15 +47,15 @@ constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
-constexpr int kFrontLeftDrivingCanId = 3; 
-constexpr int kRearLeftDrivingCanId = 7; 
-constexpr int kFrontRightDrivingCanId = 1; 
-constexpr int kRearRightDrivingCanId = 6; 
+constexpr int kFrontLeftDrivingCanId = 6; 
+constexpr int kRearLeftDrivingCanId = 1; 
+constexpr int kFrontRightDrivingCanId = 7; 
+constexpr int kRearRightDrivingCanId = 3; 
 
-constexpr int kFrontLeftTurningCanId = 4; 
-constexpr int kRearLeftTurningCanId = 8;
-constexpr int kFrontRightTurningCanId = 2;
-constexpr int kRearRightTurningCanId = 5;
+constexpr int kFrontLeftTurningCanId = 5; 
+constexpr int kRearLeftTurningCanId = 2;
+constexpr int kFrontRightTurningCanId = 8;
+constexpr int kRearRightTurningCanId = 4;
 
 }  // namespace DriveConstants
 

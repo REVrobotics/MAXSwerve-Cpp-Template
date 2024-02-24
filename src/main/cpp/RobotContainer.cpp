@@ -34,9 +34,11 @@ RobotContainer::RobotContainer() {
   // Turning is controlled by the X axis of the right stick.
   m_drive.SetDefaultCommand(frc2::RunCommand(
       [this] {
-        TurboEnabled = m_driverController.GetRawAxis(3);
-        if (TurboEnabled) throttle_percentage = OIConstants::kTurboThrottlePercentage;
-        else throttle_percentage = 1;
+        // GetThrottle returns an analog value from -1 to 1. We need to transform that to a percentage
+        button3_result = m_driverController.GetThrottle();
+        button3_result++;
+        throttle_percentage = button3_result * 0.5;
+        // throttle_percentage = 1;
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},

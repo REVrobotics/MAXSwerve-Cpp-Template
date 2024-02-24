@@ -115,10 +115,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
   // The gyro sensor
   // WF: Commented out all of the ADIS16470 code as we moved to the NavX gyro declared below
   // To revert back simply uncomment all references to m_gyro here and in DriveSubsystem.cpp
-  // frc::ADIS16470_IMU m_gyro;
+  frc::ADIS16470_IMU m_gyro;
   
   // NavX gyro
-  AHRS navx_gyro{frc::SPI::Port::kMXP};
+  // AHRS navx_gyro{frc::SPI::Port::kMXP};
 
   // Slew rate filter variables for controlling lateral acceleration
   double m_currentRotation = 0.0;
