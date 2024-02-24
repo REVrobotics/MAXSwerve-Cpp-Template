@@ -45,21 +45,19 @@ void IntakeSubsystem::Periodic(){
   // If left bumper is pressed again, stop intake "in" direction
   // If right bumper is pressed once, activate intake "out" direction
   // If right bumper is pressed once, stop intake "out" direction
-  double k_rollerMotorSpeed = 0.25;
-  bool motorOn = false;
-  int motorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
   if (m_operatorController.GetLeftBumperPressed())
   {
-    motorDirection = -1;
-    motorOn = !motorOn; // Toggle motor on/off
+    m_rollerMotorDirection = -1;
+    m_rollerMotorOn = !m_rollerMotorOn; // Toggle motor on/off
   } else if (m_operatorController.GetRightBumperPressed)
   {
-    motorDirection = 1;
-    motorOn = !motorOn;
+    m_rollerMotorDirection = 1;
+    m_rollerMotorOn = !m_rollerMotorOn;
   }
-  if (motorOn)
+  if (m_rollerMotorOn)
   {
-    m_intakeRollerMotor.Set(motorDirection * k_rollerMotorSpeed);
+    m_intakeRollerMotor.Set(m_rollerMotorDirection * k_rollerMotorSpeed);
   } else
   {
     m_intakeRollerMotor.StopMotor(); 
