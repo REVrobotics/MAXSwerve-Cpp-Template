@@ -17,8 +17,8 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
-#include "subsystems/IntakeSubsystem.h"
-#include "subsystems/ShooterSubsystem.h"
+// #include "subsystems/IntakeSubsystem.h"
+// #include "subsystems/ShooterSubsystem.h"
 
 /**
  * This class is where the bulk of the robot should be declared.  Since
@@ -55,14 +55,14 @@ class RobotContainer {
   // When set the robot goes at full throttle.  When clear full throttle is scaled down by
   // Should be k constants
   double button3_result;
-  int throttle_percentage;
+  double throttle_percentage;
 
   // The robot's subsystems and commands are defined here...
 
   // The robot's subsystems
   DriveSubsystem m_drive;
-  IntakeSubsystem m_intake;
-  ShooterSubsystem m_shooter;
+ // IntakeSubsystem m_intake;
+ // ShooterSubsystem m_shooter;
 
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;

@@ -15,6 +15,7 @@
 #include <frc2/command/button/JoystickButton.h>
 #include <units/angle.h>
 #include <units/velocity.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include <utility>
 
@@ -36,8 +37,12 @@ RobotContainer::RobotContainer() {
       [this] {
         // GetThrottle returns an analog value from -1 to 1. We need to transform that to a percentage
         button3_result = m_driverController.GetThrottle();
-        button3_result++;
+        frc::SmartDashboard::PutNumber("Throttle", button3_result);
+        button3_result--;
+        button3_result = button3_result * -1;
+        frc::SmartDashboard::PutNumber("Adjusted Throttle", button3_result);
         throttle_percentage = button3_result * 0.5;
+        frc::SmartDashboard::PutNumber("Throttle percentage", throttle_percentage);
         // throttle_percentage = 1;
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
