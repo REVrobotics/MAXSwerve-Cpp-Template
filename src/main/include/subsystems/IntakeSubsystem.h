@@ -2,7 +2,7 @@
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/CANSparkMax.h>
-#include <SparkRelativeEncoder.h>
+#include <rev/SparkRelativeEncoder.h>
 
 #include "Constants.h"
 
@@ -11,11 +11,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   IntakeSubsystem();
 
   // Subsystem method declarations go here.
-
-  /**
-   * Example: Do the thing
-   */
-  // void DoTheThing();
+  void IntakeSubsystem::setIntakePosition(double position);
 
   // This method is called periodically by the CommandScheduler
   void Periodic() override;
@@ -44,9 +40,12 @@ class IntakeSubsystem : public frc2::SubsystemBase {
                           
   // Deployed intake position value from encoder
   // TODO - determine correct value
-  const double k_intakeDeployedPosition = 1.0;
+  constexpr double k_intakeDeployedPosition = 1.0;
 
   // Retracted intake position value from encoder
   // TODO - determine correct value
-  const double k_intakeRetractedPosition = 0.0;
+  constexpr double k_intakeRetractedPosition = 0.0;
+
+  bool m_rollerMotorOn = false;
+  int m_rollerMotorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
 };

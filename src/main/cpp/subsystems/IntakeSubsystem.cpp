@@ -10,11 +10,11 @@ IntakeSubsystem::IntakeSubsystem(){};
 // Need to initialize encode position to 0 on startup
 
 void IntakeSubsystem::setIntakePosition(double position){
-      # If encoder position has not met target rotations yet, drive motor
+      // If encoder position has not met target rotations yet, drive motor
       double k_intakeRaiseLowerMotorSpeed = 0.1;
       double k_positionFudge = 0.05;
 
-      double intakeRaiseLowerValue = m_intakeRaiseLowerEncoder.GetPosition();
+      double intakeRaiseLowerValue = IntakeSubsystem::m_intakeRaiseLowerEncoder.GetPosition();
       if(intakeRaiseLowerValue < (position - k_positionFudge))
       {
         m_intakeRaiseLowerMotor.Set(k_intakeRaiseLowerMotorSpeed);
