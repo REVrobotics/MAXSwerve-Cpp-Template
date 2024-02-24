@@ -41,36 +41,28 @@ void IntakeSubsystem::Periodic(){
     IntakeSubsystem::setIntakePosition(k_intakeRetractedPosition);
   }
 
-  // If left bumper is pressed, activate intake "in" direction
-  // If right bumper is pressed, activate intake "out" direction
+  // If left bumper is pressed once, activate intake "in" direction
+  // If left bumper is pressed again, stop intake "in" direction
+  // If right bumper is pressed once, activate intake "out" direction
+  // If right bumper is pressed once, stop intake "out" direction
   double k_rollerMotorSpeed = 0.25;
   bool motorOn = false;
+  int motorDirection = -1; // -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
   if (m_operatorController.GetLeftBumperPressed())
   {
-    // Set direction "in"
-    if (motorOn == false)
-    {
-      motorOn = true;
-      // Set intake motor to reverse speed
-      m_intakeRollerMotor.Set(-k_rollerMotorSpeed);
-    } else {
-      motorOn = false;
-      m_intakeRollerMotor.StopMotor();
-    }
+    motorDirection = -1;
+    motorOn = !motorOn; // Toggle motor on/off
   } else if (m_operatorController.GetRightBumperPressed)
   {
-    // Set direction "out"
-    if(motorOn == false)
-    {
-      motorOn = true;
-      // Set intake motor to forward speed
-      m_intakeRollerMotor.Set(k_rollerMotorSpeed);
-    } else
-    {
-      motorOn = false;
-      m_intakeRollerMotor.StopMotor();
-    }
+    motorDirection = 1;
+    motorOn = !motorOn;
   }
- 
+  if (motorOn)
+  {
+    m_intakeRollerMotor.Set(motorDirection * k_rollerMotorSpeed);
+  } else
+  {
+    m_intakeRollerMotor.StopMotor(); 
+  }
 
 }
