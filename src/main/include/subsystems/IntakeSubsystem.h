@@ -8,14 +8,18 @@
 
 class IntakeSubsystem : public frc2::SubsystemBase {
  public:
+  // Subsystem method declarations go here.
+
+  // Constructor
   IntakeSubsystem();
 
-  // Subsystem method declarations go here.
-  void setIntakePosition(double position);
-  
   // This method is called periodically by the CommandScheduler
   void Periodic() override;
 
+  // Move the intake to retracted or deployed position 
+  //  (k_intakeDeployedPosition or k_intakeRetracted)
+  void setIntakePosition(double position);
+  
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
