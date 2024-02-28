@@ -37,13 +37,25 @@ RobotContainer::RobotContainer() {
       [this] {
         // GetThrottle returns an analog value from -1 to 1. We need to transform that to a percentage
         button3_result = m_driverController.GetThrottle();
-        frc::SmartDashboard::PutNumber("Throttle", button3_result);
+        // frc::SmartDashboard::PutNumber("Throttle", button3_result);
+        // When the throttle is all the way towards the top the result is -1
+        // The kids want this to be 100%.  So subtract one to get a value between
+        // 0 and -2.  Then multiply by -1 to get rid of the negative and divide 
+        // by 2 to get a value between 0 and 1.  This is our percentage.
         button3_result--;
         button3_result = button3_result * -1;
-        frc::SmartDashboard::PutNumber("Adjusted Throttle", button3_result);
+        // frc::SmartDashboard::PutNumber("Adjusted Throttle", button3_result);
         throttle_percentage = button3_result * 0.5;
+        // Below a certain percentage the robot won't move at all.  Don't
+        // let the throttle below this value.
+        if (throttle_percentage < 0.15) {throttle_percentage = 0.15;}
         frc::SmartDashboard::PutNumber("Throttle percentage", throttle_percentage);
-        // throttle_percentage = 1;
+        
+        // Pushing buttons 11 and 12 resets the Z axis heading.  This could
+        // be useful if the gyro drifts a lot
+        if (m_driverController.GetRawButton(11) && m_driverController.GetRawButton(12))
+            { m_drive.ZeroHeading();}
+
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},
