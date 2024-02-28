@@ -16,9 +16,6 @@ void IntakeSubsystem::setIntakePosition(double position){
   static constexpr double k_positionFudge = 0.05;
 
   double intakeRaiseLowerValue = m_intakeRaiseLowerEncoder.GetPosition();
-  // If there's a change in direction, we need to at least stop, then reverse - 
-  //   slow & reverse is even better 
-
 
   if(intakeRaiseLowerValue < (position - k_positionFudge))    // If the position is less than requested, move forward
   {
