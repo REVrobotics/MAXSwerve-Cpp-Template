@@ -1,6 +1,7 @@
 #include <rev/CANSparkMax.h>
 #include <rev/CANSparkLowLevel.h>
 
+
 #include "subsystems/IntakeSubsystem.h"
 #include "Constants.h"
 #include "RobotContainer.h"
@@ -65,6 +66,16 @@ void IntakeSubsystem::retract(){
 }
 
 void IntakeSubsystem::Periodic(){
+  if (m_operatorController.getRightY() > 0)
+  {
+
+  }
+  // If right stick Y axis is pressed forward, lower intake
+  if (m_operatorController.getRightY() < 0)
+  {
+  
+  }
+ }
   if (m_operatorController.getRightY() > 0)
   {
 
