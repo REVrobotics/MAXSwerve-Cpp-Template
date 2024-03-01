@@ -94,10 +94,10 @@ void RobotContainer::ConfigureButtonBindings() {
   ));
 
   // If right stick Y axis is pressed forward, deploy intake
-  m_rightStickForward.OnTrue(frc2::cmd::RunOnce([this]{ m_intake.deploy(); }));
+  m_rightStickForward().OnTrue(frc2::cmd::RunOnce([this]{ m_intake.deploy(); }));
 
   // If right stick Y axis is pressed backward, raise intake
-  m_rightStickBackward.OnTrue(frc2::cmd::RunOnce([this]{ m_intake.retract(); }));
+  m_rightStickBackward().OnTrue(frc2::cmd::RunOnce([this]{ m_intake.retract(); }));
   
 }
 

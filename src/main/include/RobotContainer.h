@@ -46,8 +46,8 @@ private:
 
   // Right stick controls intake raise (backward Y) and lower (forward Y)
   // TODO: Make the getRightY() thresholds a k constant (right now 0.5)
-  frc2::Trigger m_rightStickForward([&m_operatorController]{ return m_operatorController.getRightY() > 0.5});
-  frc2::Trigger m_rightStickBackward([&m_operatorController]{ return m_operatorController.getRightY() < -0.5})
+  frc2::Trigger m_rightStickForward([&m_operatorController]{ return (m_operatorController.GetRightY() > 0.5); });
+  frc2::Trigger m_rightStickBackward([&m_operatorController]{ return (m_operatorController.GetRightY() < -0.5); });
 
   // Left bumper controls intake "in" - in while pressed?
   //frc2::Trigger m_operatorLeftBumper = m_operatorController.LeftBumper();

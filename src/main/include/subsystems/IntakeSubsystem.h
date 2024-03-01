@@ -19,6 +19,21 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Move the intake to retracted or deployed position 
   //  (k_intakeDeployedPosition or k_intakeRetracted)
   void setIntakePosition(double position);
+
+  // Deploy the intake
+  void deploy();
+
+  // Retract the intake
+  void retract();
+
+  // Start intake rollers in the "in" direction
+  void rollIn();
+
+  // Start intake rollers in the "out" direction
+  void rollOut();
+
+  // Stop intake rollers
+  void stopRollers();
   
  private:
   // Components (e.g. motor controllers and sensors) should generally be
@@ -36,7 +51,7 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // Intake raise/lower motor
   rev::CANSparkMax m_intakeRaiseLowerMotor{IntakeSubsystemConstants::kIntakeRaiseLowerCANId,
                                              rev::CANSparkLowLevel::MotorType::kBrushless};
-  rev::SparkMaxRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder();
+  rev::SparkRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder(c_SparkMax_kHallSensor);
 
   // Intake roller motor
   rev::CANSparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
