@@ -55,6 +55,33 @@ void RobotContainer::ConfigureButtonBindings() {
   frc2::JoystickButton(&m_driverController,
                        frc::XboxController::Button::kRightBumper)
       .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
+
+  // Start / stop intake rollers in the "in" direction
+  m_operatorController.LeftBumper().OnTrue(new frc2::cmd::StartEnd(
+    // Start rollers spinning in
+    [this] { m_intake.rollIn(); },
+    // Stop the rollers at the end of the command
+    [this] { m_intake.stopRollers(); },
+    // Requires the shooter subsystem
+    {&m_intake}
+  ));
+
+  // Start / stop intake rollers in the "out" direction
+  m_operatorController.RightBumper().OnTrue(new frc2::cmd::StartEnd(
+    // Start rollers spinning out
+    [this] { m_intake.rollOut(); },
+    // Stop the rollers at the end of the command
+    [this] { m_intake.stopRoller(); },
+    // Requires the shooter subsystem
+    {&m_intake}
+  ));
+
+  // If right stick Y axis is pressed forward, deploy intake
+  m_rightStickForward.OnTrue(frc2::cmd::RunOnce([this]{ m_intake.deploy(); }));
+
+  // If right stick Y axis is pressed backward, raise intake
+  m_rightStickBackward.OnTrue(frc2::cmd::RunOnce([this]{ m_intake.retract(); }));
+  
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
@@ -109,3 +136,5 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
           [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); },
           {}));
 }
+
+
