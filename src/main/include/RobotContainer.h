@@ -33,7 +33,8 @@ class RobotContainer {
 
   frc2::Command* GetAutonomousCommand();
 
- private:
+private:
+ 
   // The driver's controller
   frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
 
@@ -44,15 +45,13 @@ class RobotContainer {
   // double frc::XboxController::GetLeftY	(		)	const
 
   // Right stick controls intake raise (backward Y) and lower (forward Y)
-  // TODO: Make the getRightY() thresholds a k constant (right now 0.5)
-  frc2::Trigger m_rightStickForward([&m_operatorController]{ return m_operatorController.getRightY() > 0.5});
-  frc2::Trigger m_rightStickBackward([&m_operatorController]{ return m_operatorController.getRightY() < -0.5})
+  // double frc::XboxController::GetRightY	(		)	const
 
   // Left bumper controls intake "in" - in while pressed?
-  //frc2::Trigger m_operatorLeftBumper = m_operatorController.LeftBumper();
+  frc2::Trigger m_operatorLeftBumper = m_operatorController.LeftBumper();
 
   // Right bumper controls intoke "out" - out while pressed?
-  // frc2::Trigger m_operatorRightBumper = m_operatorController.RightBumper();
+  frc2::Trigger m_operatorRightBumper = m_operatorController.RightBumper();
 
   // When set the robot goes at full throttle.  When clear full throttle is scaled down by
   // Should be k constants

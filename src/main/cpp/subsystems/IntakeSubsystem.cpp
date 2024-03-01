@@ -11,7 +11,7 @@ IntakeSubsystem::IntakeSubsystem(){};
 
 // This needs to be a Command
 void IntakeSubsystem::setIntakePosition(double position){
-  # If encoder position has not met target rotations yet, drive motor
+  // If encoder position has not met target rotations yet, drive motor
   static constexpr double k_intakeRaiseLowerMotorSpeed = 0.1;
   static constexpr double k_positionFudge = 0.05;
 
