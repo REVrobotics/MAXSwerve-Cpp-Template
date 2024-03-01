@@ -29,46 +29,49 @@ void IntakeSubsystem::setIntakePosition(double position){
   }
 }
 
+// Start / stop intake rollers in the "in" direction
+void IntakeSubsystem::rollIn(){
+  // If left bumper is pressed once, activate intake "in" direction
+  // If left bumper is pressed again, stop intake "in" direction
+  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+  // If we're reversing direction, we need to slow down, stop, and speed up in reverse
+  m_rollerMotorDirection = -1;
+  m_intakeRollerMotor.Set(m_rollerMotorDirection * k_rollerMotorSpeed);
+}
+
+// Start intake rollers in the "out" direction
+void IntakeSubsystem::rollOut(){
+  // If right bumper is pressed once, activate intake "out" direction
+  // If right bumper is pressed once, stop intake "out" direction
+  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
+  // If we're reversing direction, we need to slow down, stop, and speed up in reverse
+  m_rollerMotorDirection = 1;
+  m_intakeRollerMotor.Set(m_rollerMotorDirection * k_rollerMotorSpeed);
+}
+
+// Stop intake rollers
+void IntakeSubsystem::stopRollers(){
+  m_intakeRollerMotor.StopMotor();
+}
+
+// Deploy the intake
+void IntakeSubsystem::deploy(){
+    IntakeSubsystem::setIntakePosition(k_intakeDeployedPosition);
+}
+
+// Retract the intake
+void IntakeSubsystem::retract(){
+  IntakeSubsystem::setIntakePosition(k_intakeRetractedPosition);
+}
+
 void IntakeSubsystem::Periodic(){
-  // If right stick Y axis is pressed back, raise intake
-  // TODO - is backward negative or positive? Adjust > | < accordingly
   if (m_operatorController.getRightY() > 0)
   {
-    IntakeSubsystem::setIntakePosition(k_intakeDeployedPosition);
+
   }
   // If right stick Y axis is pressed forward, lower intake
   if (m_operatorController.getRightY() < 0)
   {
-    IntakeSubsystem::setIntakePosition(k_intakeRetractedPosition);
+  
   }
-
-  // If left bumper is pressed once, activate intake "in" direction
-  // If left bumper is pressed again, stop intake "in" direction
-  // If right bumper is pressed once, activate intake "out" direction
-  // If right bumper is pressed once, stop intake "out" direction
-  // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
- 
-  // If we're reversing direction, we need to slow down, stop, and speed up in reverse
-  if (m_operatorController.GetLeftBumperPressed())
-  {
-    if (m_rollerMotorDirection != -1){
-      m_intakeRollerMotor.StopMotor(); // Avoid sharp reverse in direction
-      m_rollerMotorDirection = -1;
-    }  
-    m_rollerMotorOn = !m_rollerMotorOn; // Toggle motor on/off
-  } else if (m_operatorController.GetRightBumperPressed)
-  {
-    if (m_rollerMotorDirection != 1){
-      m_intakeRollerMotor.StopMotor(); // Avoid sharp reverse in direction
-      m_rollerMotorDirection = 1;
-    }  
-    m_rollerMotorOn = !m_rollerMotorOn;
-  }
-  if (m_rollerMotorOn)
-  {
-    m_intakeRollerMotor.Set(m_rollerMotorDirection * k_rollerMotorSpeed);
-  } else
-  {
-    m_intakeRollerMotor.StopMotor(); 
-  }
-}
+ }
