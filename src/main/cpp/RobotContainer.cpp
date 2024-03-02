@@ -11,6 +11,7 @@
 #include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/StartEndCommand.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <units/angle.h>
@@ -74,30 +75,31 @@ void RobotContainer::ConfigureButtonBindings() {
       .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
 
   // Start / stop intake rollers in the "in" direction
-  m_operatorController.LeftBumper().OnTrue(new frc2::cmd::StartEnd(
+  // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
+  m_operatorController.LeftBumper().OnTrue([this]{ this.StartEnd(
     // Start rollers spinning in
     [this] { m_intake.rollIn(); },
     // Stop the rollers at the end of the command
     [this] { m_intake.stopRollers(); },
     // Requires the shooter subsystem
     {&m_intake}
-  ));
+  )});
 
   // Start / stop intake rollers in the "out" direction
-  m_operatorController.RightBumper().OnTrue(new frc2::cmd::StartEnd(
+  m_operatorController.RightBumper().OnTrue([this]{ this.StartEnd(
     // Start rollers spinning out
     [this] { m_intake.rollOut(); },
     // Stop the rollers at the end of the command
-    [this] { m_intake.stopRoller(); },
+    [this] { m_intake.stopRollers(); },
     // Requires the shooter subsystem
     {&m_intake}
-  ));
+  )});
 
   // If right stick Y axis is pressed forward, deploy intake
-  m_rightStickForward().OnTrue(frc2::cmd::RunOnce([this]{ m_intake.deploy(); }));
+  m_rightStickForward.OnTrue(m_intake.deploy());
 
   // If right stick Y axis is pressed backward, raise intake
-  m_rightStickBackward().OnTrue(frc2::cmd::RunOnce([this]{ m_intake.retract(); }));
+  m_rightStickBackward.OnTrue(m_intake.retract());
   
 }
 
