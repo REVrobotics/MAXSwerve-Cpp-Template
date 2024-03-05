@@ -44,15 +44,15 @@ frc2::CommandPtr IntakeSubsystem::rollIn(){
         m_intakeRollerMotor.Set(m_rollerMotorDirection * k_rollerMotorSpeed); 
         },
     // Stop the rollers at the end of the command
-    [this] { m_intakeRollerMotor.stopMotor(); },
+    [this] { m_intakeRollerMotor.StopMotor(); }
     // Requires the shooter subsystem
-    {&m_intake}
+    // {&m_intake}
   );
 }
 
 
 // Start intake rollers in the "out" direction
-void IntakeSubsystem::rollOut(){
+frc2::CommandPtr IntakeSubsystem::rollOut(){
   // If right bumper is pressed once, activate intake "out" direction
   // If right bumper is pressed once, stop intake "out" direction
   // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
@@ -64,9 +64,9 @@ void IntakeSubsystem::rollOut(){
         m_intakeRollerMotor.Set(m_rollerMotorDirection * k_rollerMotorSpeed); 
         },
     // Stop the rollers at the end of the command
-    [this] { m_intakeRollerMotor.stopMotor(); },
+    [this] { m_intakeRollerMotor.StopMotor(); }
     // Requires the shooter subsystem
-    {&m_intake}
+    // {&m_intake}
   ); 
 }
 

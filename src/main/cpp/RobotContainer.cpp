@@ -76,24 +76,10 @@ void RobotContainer::ConfigureButtonBindings() {
 
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
-  m_operatorController.LeftBumper().OnTrue([this]{ this.StartEnd(
-    // Start rollers spinning in
-    [this] { m_intake.rollIn(); },
-    // Stop the rollers at the end of the command
-    [this] { m_intake.stopRollers(); },
-    // Requires the shooter subsystem
-    {&m_intake}
-  )});
+  m_operatorController.LeftBumper().OnTrue(m_intake.rollIn());
 
   // Start / stop intake rollers in the "out" direction
-  m_operatorController.RightBumper().OnTrue([this]{ this.StartEnd(
-    // Start rollers spinning out
-    [this] { m_intake.rollOut(); },
-    // Stop the rollers at the end of the command
-    [this] { m_intake.stopRollers(); },
-    // Requires the shooter subsystem
-    {&m_intake}
-  )});
+  m_operatorController.RightBumper().OnTrue(m_intake.rollOut());
 
   // If right stick Y axis is pressed forward, deploy intake
   m_rightStickForward.OnTrue(m_intake.deploy());
