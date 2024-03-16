@@ -71,10 +71,13 @@ RobotContainer::RobotContainer() {
 
 void RobotContainer::ConfigureButtonBindings() {
   // Why do we have an XboxController button with a Joystick?
+  // Conflicts with other use of kRightBumper in operatorController
+  /*
   frc2::JoystickButton(&m_driverController,
                        frc::XboxController::Button::kRightBumper)
       .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
-
+  */
+  
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
   m_operatorController.LeftBumper().OnTrue(m_intake.rollIn());
