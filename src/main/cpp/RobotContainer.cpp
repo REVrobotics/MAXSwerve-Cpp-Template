@@ -102,7 +102,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
 
-  // An example trajectory to follow.  All units in meters.
+  // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
       frc::Pose2d{0_m, 0_m, 0_deg},
@@ -110,8 +110,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      {frc::Translation2d{0.25_m, 0_m}, frc::Translation2d{0.75_m, 0_m}},
-      
+      // {frc::Translation2d{0.25_m, 0_m}, frc::Translation2d{0.75_m, 0_m}},
+      {},  // No internal waypoints (empty vector)
+
       // End 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
       frc::Pose2d{1_m, 0_m, 0_deg},
@@ -125,13 +126,17 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
                                         units::radian_t{std::numbers::pi});
 
+  // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc2_1_1_swerve_controller_command.html
   frc2::SwerveControllerCommand<4> swerveControllerCommand(
-      exampleTrajectory, [this]() { return m_drive.GetPose(); },
+      exampleTrajectory, 
+      
+      [this]() { return m_drive.GetPose(); },
 
       m_drive.kDriveKinematics,
 
       frc::PIDController{AutoConstants::kPXController, 0, 0},
-      frc::PIDController{AutoConstants::kPYController, 0, 0}, thetaController,
+      frc::PIDController{AutoConstants::kPYController, 0, 0}, 
+      thetaController,
 
       [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
 
@@ -140,7 +145,8 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Reset odometry to the starting pose of the trajectory.
   m_drive.ResetOdometry(exampleTrajectory.InitialPose());
 
-  // no auto
+  // Run swerveControllerCommand above to drive the trajectory, 
+  // then run InstantCommand to stop
   return new frc2::SequentialCommandGroup(
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
