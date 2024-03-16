@@ -70,6 +70,7 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureButtonBindings() {
+  // Why do we have an XboxController button with a Joystick?
   frc2::JoystickButton(&m_driverController,
                        frc::XboxController::Button::kRightBumper)
       .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
