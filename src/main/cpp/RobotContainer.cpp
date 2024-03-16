@@ -29,6 +29,7 @@ RobotContainer::RobotContainer() {
 
   // Configure the button bindings
   ConfigureButtonBindings();
+  timer0.Reset();
 
   // Set up default drive command
   // The left stick controls translation of the robot.
@@ -89,11 +90,11 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      {frc::Translation2d{0.25_m, 0_m}, frc::Translation2d{0.75_m, 0_m}},
+      {frc::Translation2d{0.25_m, 0_m}, frc::Translation2d{0.5_m, 0_m}},
       
       // End 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
-      frc::Pose2d{1_m, 0_m, 0_deg},
+      frc::Pose2d{2_m, 0_m, 0_deg},
       // Pass the config
       config);
 

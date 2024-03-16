@@ -99,7 +99,7 @@ constexpr units::radian_t kTurningEncoderPositionPIDMinInput = 0_rad;
 constexpr units::radian_t kTurningEncoderPositionPIDMaxInput =
     units::radian_t{kTurningEncoderPositionFactor};
 
-constexpr double kDrivingP = 0.04;
+constexpr double kDrivingP = 0.08;
 constexpr double kDrivingI = 0;
 constexpr double kDrivingD = 0;
 constexpr double kDrivingFF = (1 / kDriveWheelFreeSpeedRps);
@@ -118,7 +118,7 @@ constexpr rev::CANSparkMax::IdleMode kDrivingMotorIdleMode =
 constexpr rev::CANSparkMax::IdleMode kTurningMotorIdleMode =
     rev::CANSparkMax::IdleMode::kBrake;
 
-constexpr units::ampere_t kDrivingMotorCurrentLimit = 50_A;
+constexpr units::ampere_t kDrivingMotorCurrentLimit = 40_A;
 constexpr units::ampere_t kTurningMotorCurrentLimit = 20_A;
 }  // namespace ModuleConstants
 

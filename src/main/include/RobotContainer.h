@@ -67,5 +67,8 @@ class RobotContainer {
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;
 
+  // Timer
+  frc::Timer timer0;
+  
   void ConfigureButtonBindings();
 };
