@@ -82,12 +82,17 @@ void RobotContainer::ConfigureButtonBindings() {
   // Start / stop intake rollers in the "out" direction
   m_operatorController.RightBumper().OnTrue(m_intake.rollOut());
 
+  /* Version A: Stick-based intake deploy/retract 
   // If right stick Y axis is pressed forward, deploy intake
   m_rightStickForward.OnTrue(m_intake.deploy());
 
   // If right stick Y axis is pressed backward, raise intake
   m_rightStickBackward.OnTrue(m_intake.retract());
-  
+  */
+
+  // Version B: X,Y button intake deploy/retract
+  m_operatorXButton.OnTrue(m_intake.deploy());
+  m_operatorYButton.OnTrue(m_intake.retract());
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
