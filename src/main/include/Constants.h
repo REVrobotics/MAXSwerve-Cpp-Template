@@ -146,8 +146,9 @@ namespace OIConstants {
 
 namespace IntakeSubsystemConstants {
     // TODO - set actual CAN IDs
-    constexpr int kIntakeRaiseLowerCANId = 99;
+    constexpr int kIntakeRaiseLowerCANId = 10;
     constexpr int kIntakeRollerCANId = 98;
+    // Also look in IntakeSubsystem.h
 }
 
 namespace ShooterSubsystemConstants {
