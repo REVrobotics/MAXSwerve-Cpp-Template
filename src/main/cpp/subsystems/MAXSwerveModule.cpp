@@ -72,7 +72,7 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
   m_drivingSparkMax.SetIdleMode(kDrivingMotorIdleMode);
   m_turningSparkMax.SetIdleMode(kTurningMotorIdleMode);
   m_drivingSparkMax.SetSmartCurrentLimit(kDrivingMotorCurrentLimit.value());
-  m_turningSparkMax.SetSmartCurrentLimit(kDrivingMotorCurrentLimit.value());
+  m_turningSparkMax.SetSmartCurrentLimit(kTurningMotorCurrentLimit.value());
 
   // Save the SPARK MAX configurations. If a SPARK MAX browns out during
   // operation, it will maintain the above configurations.
