@@ -11,6 +11,7 @@
 #include <frc/trajectory/TrajectoryGenerator.h>
 #include <frc2/command/InstantCommand.h>
 #include <frc2/command/SequentialCommandGroup.h>
+#include <frc2/command/StartEndCommand.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
 #include <units/angle.h>
@@ -70,9 +71,32 @@ RobotContainer::RobotContainer() {
 }
 
 void RobotContainer::ConfigureButtonBindings() {
+  // Why do we have an XboxController button with a Joystick?
+  // Conflicts with other use of kRightBumper in operatorController
+  /*
   frc2::JoystickButton(&m_driverController,
                        frc::XboxController::Button::kRightBumper)
       .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
+  */
+  
+  // Start / stop intake rollers in the "in" direction
+  // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
+  m_operatorController.LeftBumper().OnTrue(m_intake.rollIn());
+
+  // Start / stop intake rollers in the "out" direction
+  m_operatorController.RightBumper().OnTrue(m_intake.rollOut());
+
+  /* Version A: Stick-based intake deploy/retract 
+  // If right stick Y axis is pressed forward, deploy intake
+  m_rightStickForward.OnTrue(m_intake.deploy());
+
+  // If right stick Y axis is pressed backward, raise intake
+  m_rightStickBackward.OnTrue(m_intake.retract());
+  */
+
+  // Version B: X,Y button intake deploy/retract
+  m_operatorXButton.OnTrue(m_intake.deploy());
+  m_operatorYButton.OnTrue(m_intake.retract());
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
@@ -82,7 +106,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
 
-  // An example trajectory to follow.  All units in meters.
+  // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
       frc::Pose2d{0_m, 0_m, 0_deg},
@@ -90,8 +114,9 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      {frc::Translation2d{0.25_m, 0_m}, frc::Translation2d{0.5_m, 0_m}},
-      
+      // {frc::Translation2d{0.25_m, 0_m}, frc::Translation2d{0.75_m, 0_m}},
+      {},  // No internal waypoints (empty vector)
+
       // End 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
       frc::Pose2d{2_m, 0_m, 0_deg},
@@ -105,13 +130,17 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
                                         units::radian_t{std::numbers::pi});
 
+  // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc2_1_1_swerve_controller_command.html
   frc2::SwerveControllerCommand<4> swerveControllerCommand(
-      exampleTrajectory, [this]() { return m_drive.GetPose(); },
+      exampleTrajectory, 
+      
+      [this]() { return m_drive.GetPose(); },
 
       m_drive.kDriveKinematics,
 
       frc::PIDController{AutoConstants::kPXController, 0, 0},
-      frc::PIDController{AutoConstants::kPYController, 0, 0}, thetaController,
+      frc::PIDController{AutoConstants::kPYController, 0, 0}, 
+      thetaController,
 
       [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
 
@@ -120,10 +149,13 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Reset odometry to the starting pose of the trajectory.
   m_drive.ResetOdometry(exampleTrajectory.InitialPose());
 
-  // no auto
+  // Run swerveControllerCommand above to drive the trajectory, 
+  // then run InstantCommand to stop
   return new frc2::SequentialCommandGroup(
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
           [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false, false); },
           {}));
 }
+
+
