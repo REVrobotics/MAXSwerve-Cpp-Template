@@ -119,7 +119,7 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
 
       // End 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
-      frc::Pose2d{2_m, 0_m, 0_deg},
+      frc::Pose2d{1_m, 0_m, 0_deg},
       // Pass the config
       config);
 
