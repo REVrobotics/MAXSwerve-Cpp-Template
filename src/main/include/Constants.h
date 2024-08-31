@@ -47,15 +47,15 @@ constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
-constexpr int kFrontLeftDrivingCanId = 9; 
-constexpr int kRearLeftDrivingCanId = 1; 
-constexpr int kFrontRightDrivingCanId = 7; 
-constexpr int kRearRightDrivingCanId = 3; 
+constexpr int kFrontLeftDrivingCanId = 7;//9; 
+constexpr int kRearLeftDrivingCanId = 3;//1; 
+constexpr int kFrontRightDrivingCanId = 9;//7; 
+constexpr int kRearRightDrivingCanId = 1;//3; 
 
-constexpr int kFrontLeftTurningCanId = 5; 
-constexpr int kRearLeftTurningCanId = 2;
-constexpr int kFrontRightTurningCanId = 8;
-constexpr int kRearRightTurningCanId = 4;
+constexpr int kFrontLeftTurningCanId = 8;//5; 
+constexpr int kRearLeftTurningCanId = 4;//2;
+constexpr int kFrontRightTurningCanId = 5;//8;
+constexpr int kRearRightTurningCanId = 2;//4;
 
 }  // namespace DriveConstants
 
@@ -99,7 +99,7 @@ constexpr units::radian_t kTurningEncoderPositionPIDMinInput = 0_rad;
 constexpr units::radian_t kTurningEncoderPositionPIDMaxInput =
     units::radian_t{kTurningEncoderPositionFactor};
 
-constexpr double kDrivingP = 0.08;
+constexpr double kDrivingP = 0.04; //.08 strong, .008 weak
 constexpr double kDrivingI = 0;
 constexpr double kDrivingD = 0;
 constexpr double kDrivingFF = (1 / kDriveWheelFreeSpeedRps);

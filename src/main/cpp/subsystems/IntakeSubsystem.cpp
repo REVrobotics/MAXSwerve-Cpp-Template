@@ -1,6 +1,6 @@
 #include <rev/CANSparkMax.h>
 #include <rev/CANSparkLowLevel.h>
-
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "subsystems/IntakeSubsystem.h"
 #include "Constants.h"
@@ -77,6 +77,7 @@ void IntakeSubsystem::stopRollers(){
 
 // Deploy the intake
 frc2::CommandPtr IntakeSubsystem::deploy(){
+    frc::SmartDashboard::PutNumber("Intake position", 1);
     return this->RunOnce([this] { IntakeSubsystem::setIntakePosition(k_intakeDeployedPosition);});
 }
 
