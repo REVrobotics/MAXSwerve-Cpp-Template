@@ -66,6 +66,7 @@ private:
   // Should be k constants
   double button3_result;
   double throttle_percentage;
+  bool fieldRelative;
 
   // The robot's subsystems and commands are defined here...
 

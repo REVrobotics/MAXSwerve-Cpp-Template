@@ -130,6 +130,11 @@ class DriveSubsystem : public frc2::SubsystemBase {
   frc::SlewRateLimiter<units::scalar> m_rotLimiter{
       DriveConstants::kRotationalSlewRate / 1_s};
   double m_prevTime = wpi::Now() * 1e-6;
+  // Smart Dashboard Chooser
+  frc::SendableChooser<std::string> m_chooser;
+  const std::string kAutoNameDefault = "Side starting position autonomous program";
+  const std::string kAutoNameCenter = "Center starting position autonomous program";
+  std::string m_autoSelected;
 
   // Odometry class for tracking robot pose
   // 4 defines the number of modules

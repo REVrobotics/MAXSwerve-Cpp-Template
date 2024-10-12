@@ -31,6 +31,7 @@ RobotContainer::RobotContainer() {
   // Configure the button bindings
   ConfigureButtonBindings();
   timer0.Reset();
+  fieldRelative=false;
 
   // Set up default drive command
   // The left stick controls translation of the robot.
@@ -56,7 +57,10 @@ RobotContainer::RobotContainer() {
         // Pushing buttons 11 and 12 resets the Z axis heading.  This could
         // be useful if the gyro drifts a lot
         if (m_driverController.GetRawButton(11) && m_driverController.GetRawButton(12))
-            { m_drive.ZeroHeading();}
+            { m_drive.ZeroHeading();} 
+        
+        if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
+            { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
@@ -65,7 +69,7 @@ RobotContainer::RobotContainer() {
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
-            true, true);
+            fieldRelative, true);
       },
       {&m_drive}));
 }
@@ -101,8 +105,8 @@ void RobotContainer::ConfigureButtonBindings() {
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Set up config for trajectory
-  frc::TrajectoryConfig config(AutoConstants::kMaxSpeed,
-                               AutoConstants::kMaxAcceleration);
+  frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
+                               AutoConstants::kMaxAcceleration/2);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
 
@@ -111,16 +115,20 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // Start at the origin facing the +X direction
       frc::Pose2d{0_m, 0_m, 0_deg},
 
-      // WF- Keeping this example waypoint code in case we need to use something like
+      // waypoint 
+      //WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      // {frc::Translation2d{0.25_m, 0_m}, frc::Translation2d{0.75_m, 0_m}},
-      {},  // No internal waypoints (empty vector)
+      {frc::Translation2d{0.5_m, -.5_m},
+      frc::Translation2d{1_m, 1_m}},
+      // {},  // No internal waypoints (empty vector)
 
-      // End 1 meter from where we started.  This is enough distance to exit the starting zone and 
+      // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
-      frc::Pose2d{1_m, 0_m, 0_deg},
+      frc::Pose2d{3_m, 0_m, 180_deg}, // 3_m, -1_m, 0_deg is the
+      // 3_m, 0_m, -1_deg = no swerving, just forward
       // Pass the config
+      
       config);
 
   frc::ProfiledPIDController<units::radians> thetaController{

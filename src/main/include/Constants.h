@@ -140,7 +140,7 @@ namespace OIConstants {
     constexpr int kDriverControllerPort = 0;
     // Was named kShooterControllerPort, but this controller also controls intake
     constexpr int kOperatorControllerPort = 1;
-    constexpr double kDriveDeadband = 0.07;
+    constexpr double kDriveDeadband = 0.09; //og = 0.07
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
 
