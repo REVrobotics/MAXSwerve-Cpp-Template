@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <rev/CANSparkMax.h>
+#include <rev/SparkMax.h>
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
@@ -59,10 +59,6 @@ constexpr int kRearRightTurningCanId = 16;
 }  // namespace DriveConstants
 
 namespace ModuleConstants {
-// Invert the turning encoder, since the output shaft rotates in the opposite
-// direction of the steering motor in the MAXSwerve Module.
-constexpr bool kTurningEncoderInverted = true;
-
 // The MAXSwerve module can be configured with one of three pinion gears: 12T,
 // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
 // more teeth will result in a robot that drives faster).
@@ -81,44 +77,6 @@ constexpr double kDrivingMotorReduction =
 constexpr double kDriveWheelFreeSpeedRps =
     (kDrivingMotorFreeSpeedRps * kWheelCircumference.value()) /
     kDrivingMotorReduction;
-
-constexpr double kDrivingEncoderPositionFactor =
-    (kWheelDiameter.value() * std::numbers::pi) /
-    kDrivingMotorReduction;  // meters
-constexpr double kDrivingEncoderVelocityFactor =
-    ((kWheelDiameter.value() * std::numbers::pi) / kDrivingMotorReduction) /
-    60.0;  // meters per second
-
-constexpr double kTurningEncoderPositionFactor =
-    (2 * std::numbers::pi);  // radians
-constexpr double kTurningEncoderVelocityFactor =
-    (2 * std::numbers::pi) / 60.0;  // radians per second
-
-constexpr units::radian_t kTurningEncoderPositionPIDMinInput = 0_rad;
-constexpr units::radian_t kTurningEncoderPositionPIDMaxInput =
-    units::radian_t{kTurningEncoderPositionFactor};
-
-constexpr double kDrivingP = 0.04;
-constexpr double kDrivingI = 0;
-constexpr double kDrivingD = 0;
-constexpr double kDrivingFF = (1 / kDriveWheelFreeSpeedRps);
-constexpr double kDrivingMinOutput = -1;
-constexpr double kDrivingMaxOutput = 1;
-
-constexpr double kTurningP = 1;
-constexpr double kTurningI = 0;
-constexpr double kTurningD = 0;
-constexpr double kTurningFF = 0;
-constexpr double kTurningMinOutput = -1;
-constexpr double kTurningMaxOutput = 1;
-
-constexpr rev::CANSparkMax::IdleMode kDrivingMotorIdleMode =
-    rev::CANSparkMax::IdleMode::kBrake;
-constexpr rev::CANSparkMax::IdleMode kTurningMotorIdleMode =
-    rev::CANSparkMax::IdleMode::kBrake;
-
-constexpr units::ampere_t kDrivingMotorCurrentLimit = 50_A;
-constexpr units::ampere_t kTurningMotorCurrentLimit = 20_A;
 }  // namespace ModuleConstants
 
 namespace AutoConstants {

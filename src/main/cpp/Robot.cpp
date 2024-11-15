@@ -7,7 +7,9 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-void Robot::RobotInit() {}
+#include "Configs.h"
+
+void Robot::RobotInit() { Configs::Initialize(); }
 
 /**
  * This function is called every 20 ms, no matter the mode. Use

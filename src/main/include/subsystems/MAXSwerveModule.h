@@ -7,10 +7,12 @@
 #include <frc/geometry/Rotation2d.h>
 #include <frc/kinematics/SwerveModulePosition.h>
 #include <frc/kinematics/SwerveModuleState.h>
-#include <rev/CANSparkMax.h>
 #include <rev/SparkAbsoluteEncoder.h>
-#include <rev/SparkPIDController.h>
+#include <rev/SparkClosedLoopController.h>
+#include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
+
+using namespace rev::spark;
 
 class MAXSwerveModule {
  public:
@@ -50,19 +52,17 @@ class MAXSwerveModule {
   void ResetEncoders();
 
  private:
-  rev::CANSparkMax m_drivingSparkMax;
-  rev::CANSparkMax m_turningSparkMax;
+  SparkMax m_drivingSparkMax;
+  SparkMax m_turningSparkMax;
 
-  rev::SparkRelativeEncoder m_drivingEncoder =
-      m_drivingSparkMax.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor);
-  rev::SparkAbsoluteEncoder m_turningAbsoluteEncoder =
-      m_turningSparkMax.GetAbsoluteEncoder(
-          rev::SparkAbsoluteEncoder::Type::kDutyCycle);
+  SparkRelativeEncoder m_drivingEncoder = m_drivingSparkMax.GetEncoder();
+  SparkAbsoluteEncoder m_turningAbsoluteEncoder =
+      m_turningSparkMax.GetAbsoluteEncoder();
 
-  rev::SparkPIDController m_drivingPIDController =
-      m_drivingSparkMax.GetPIDController();
-  rev::SparkPIDController m_turningPIDController =
-      m_turningSparkMax.GetPIDController();
+  SparkClosedLoopController m_drivingPIDController =
+      m_drivingSparkMax.GetClosedLoopController();
+  SparkClosedLoopController m_turningPIDController =
+      m_turningSparkMax.GetClosedLoopController();
 
   double m_chassisAngularOffset = 0;
   frc::SwerveModuleState m_desiredState{units::meters_per_second_t{0.0},
