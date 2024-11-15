@@ -12,17 +12,17 @@ using namespace rev::spark;
 
 MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
                                  const double chassisAngularOffset)
-    : m_drivingSparkMax(drivingCANId, SparkMax::MotorType::kBrushless),
-      m_turningSparkMax(turningCANId, SparkMax::MotorType::kBrushless) {
+    : m_drivingSpark(drivingCANId, SparkMax::MotorType::kBrushless),
+      m_turningSpark(turningCANId, SparkMax::MotorType::kBrushless) {
   // Apply the respective configurations to the SPARKS. Reset parameters before
   // applying the configuration to bring the SPARK to a known good state.
   // Persist the settings to the SPARK to avoid losing them on a power cycle.
-  m_drivingSparkMax.Configure(Configs::MAXSwerveModule::drivingConfig,
-                              SparkBase::ResetMode::kResetSafeParameters,
-                              SparkBase::PersistMode::kPersistParameters);
-  m_turningSparkMax.Configure(Configs::MAXSwerveModule::turningConfig,
-                              SparkBase::ResetMode::kResetSafeParameters,
-                              SparkBase::PersistMode::kPersistParameters);
+  m_drivingSpark.Configure(Configs::MAXSwerveModule::drivingConfig,
+                           SparkBase::ResetMode::kResetSafeParameters,
+                           SparkBase::PersistMode::kPersistParameters);
+  m_turningSpark.Configure(Configs::MAXSwerveModule::turningConfig,
+                           SparkBase::ResetMode::kResetSafeParameters,
+                           SparkBase::PersistMode::kPersistParameters);
 
   m_chassisAngularOffset = chassisAngularOffset;
   m_desiredState.angle =
@@ -55,9 +55,9 @@ void MAXSwerveModule::SetDesiredState(
   correctedDesiredState.Optimize(
       frc::Rotation2d(units::radian_t{m_turningAbsoluteEncoder.GetPosition()}));
 
-  m_drivingPIDController.SetReference((double)correctedDesiredState.speed,
-                                      SparkMax::ControlType::kVelocity);
-  m_turningPIDController.SetReference(
+  m_drivingClosedLoopController.SetReference(
+      (double)correctedDesiredState.speed, SparkMax::ControlType::kVelocity);
+  m_turningClosedLoopController.SetReference(
       correctedDesiredState.angle.Radians().value(),
       SparkMax::ControlType::kPosition);
 

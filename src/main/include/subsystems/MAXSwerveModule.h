@@ -52,17 +52,17 @@ class MAXSwerveModule {
   void ResetEncoders();
 
  private:
-  SparkMax m_drivingSparkMax;
-  SparkMax m_turningSparkMax;
+  SparkMax m_drivingSpark;
+  SparkMax m_turningSpark;
 
-  SparkRelativeEncoder m_drivingEncoder = m_drivingSparkMax.GetEncoder();
+  SparkRelativeEncoder m_drivingEncoder = m_drivingSpark.GetEncoder();
   SparkAbsoluteEncoder m_turningAbsoluteEncoder =
-      m_turningSparkMax.GetAbsoluteEncoder();
+      m_turningSpark.GetAbsoluteEncoder();
 
-  SparkClosedLoopController m_drivingPIDController =
-      m_drivingSparkMax.GetClosedLoopController();
-  SparkClosedLoopController m_turningPIDController =
-      m_turningSparkMax.GetClosedLoopController();
+  SparkClosedLoopController m_drivingClosedLoopController =
+      m_drivingSpark.GetClosedLoopController();
+  SparkClosedLoopController m_turningClosedLoopController =
+      m_turningSpark.GetClosedLoopController();
 
   double m_chassisAngularOffset = 0;
   frc::SwerveModuleState m_desiredState{units::meters_per_second_t{0.0},
