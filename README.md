@@ -19,4 +19,4 @@ To get started, make sure you have calibrated the zero offsets for the absolute 
 
 It is possible that this project will not work for your robot right out of the box. Various things like the CAN IDs, PIDF gains, chassis configuration, etc. must be determined for your own robot!
 
-These values can be adjusted in the `Configs.java` and `Constants.java` files.
+These values can be adjusted in the `Configs.h` and `Constants.h` files.
