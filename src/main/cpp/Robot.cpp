@@ -7,8 +7,6 @@
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <frc2/command/CommandScheduler.h>
 
-#include "Configs.h"
-
 void Robot::RobotInit() {}
 
 /**
@@ -66,8 +64,5 @@ void Robot::TeleopPeriodic() {}
 void Robot::TestPeriodic() {}
 
 #ifndef RUNNING_FRC_TESTS
-int main() {
-  Configs::Initialize();
-  return frc::StartRobot<Robot>();
-}
+int main() { return frc::StartRobot<Robot>(); }
 #endif
