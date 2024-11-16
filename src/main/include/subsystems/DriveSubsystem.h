@@ -37,11 +37,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
    * @param rot           Angular rate of the robot.
    * @param fieldRelative Whether the provided x and y speeds are relative to
    *                      the field.
-   * @param rateLimit     Whether to enable rate limiting for smoother control.
    */
   void Drive(units::meters_per_second_t xSpeed,
              units::meters_per_second_t ySpeed, units::radians_per_second_t rot,
-             bool fieldRelative, bool rateLimit);
+             bool fieldRelative);
 
   /**
    * Sets the wheels into an X formation to prevent movement.
