@@ -112,17 +112,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
   // The gyro sensor
   frc::ADIS16470_IMU m_gyro;
 
-  // Slew rate filter variables for controlling lateral acceleration
-  double m_currentRotation = 0.0;
-  double m_currentTranslationDir = 0.0;
-  double m_currentTranslationMag = 0.0;
-
-  frc::SlewRateLimiter<units::scalar> m_magLimiter{
-      DriveConstants::kMagnitudeSlewRate / 1_s};
-  frc::SlewRateLimiter<units::scalar> m_rotLimiter{
-      DriveConstants::kRotationalSlewRate / 1_s};
-  double m_prevTime = wpi::Now() * 1e-6;
-
   // Odometry class for tracking robot pose
   // 4 defines the number of modules
   frc::SwerveDriveOdometry<4> m_odometry;
