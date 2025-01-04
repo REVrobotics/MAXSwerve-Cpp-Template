@@ -5,6 +5,7 @@
 #include "subsystems/DriveSubsystem.h"
 
 #include <frc/geometry/Rotation2d.h>
+#include <hal/FRCUsageReporting.h>
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
@@ -27,7 +28,11 @@ DriveSubsystem::DriveSubsystem()
                      m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
-                 frc::Pose2d{}} {}
+                 frc::Pose2d{}} {
+  // Usage reporting for MAXSwerve template
+  HAL_Report(HALUsageReporting::kResourceType_RobotDrive,
+             HALUsageReporting::kRobotDriveSwerve_MaxSwerve);
+}
 
 void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
