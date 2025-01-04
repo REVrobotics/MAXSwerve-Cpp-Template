@@ -1,5 +1,10 @@
 # MAXSwerve C++ Template Changelog
 
+## [2025.1] - 2025-01-04
+
+- Updates project for kickoff releases
+- Adds usage reporting
+
 ## [2025.0] - 2024-11-15
 
 - Updates project for 2025 FRC season
