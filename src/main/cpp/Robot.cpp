@@ -35,7 +35,7 @@ void Robot::DisabledPeriodic() {}
 void Robot::AutonomousInit() {
   //m_chooser.AddOption(kAutoNameDefault, kAutoNameDefault);
   //m_chooser.SetDefaultOption(kAutoNameCenter, kAutoNameCenter);
-  frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
+  //frc::SmartDashboard::PutData("Auto Modes", &m_chooser);
   m_autonomousCommand = m_container.GetAutonomousCommand();
 
   if (m_autonomousCommand != nullptr) {

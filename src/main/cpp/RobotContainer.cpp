@@ -52,6 +52,8 @@ RobotContainer::RobotContainer() {
         // Below a certain percentage the robot won't move at all.  Don't
         // let the throttle below this value.
         if (throttle_percentage < 0.15) {throttle_percentage = 0.15;}
+        // Robot is uncontrollable at full throttle so max at 90 percent
+        else if (throttle_percentage > 0.9) {throttle_percentage = 0.9;}
         frc::SmartDashboard::PutNumber("Throttle percentage", throttle_percentage);
         
         // Pushing buttons 11 and 12 resets the Z axis heading.  This could
@@ -119,13 +121,13 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       //WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      {frc::Translation2d{0.5_m, -.5_m},
-      frc::Translation2d{1_m, 1_m}},
+      {frc::Translation2d{2_m, 0_m},
+      frc::Translation2d{4_m, 0_m}},
       // {},  // No internal waypoints (empty vector)
 
       // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
-      frc::Pose2d{3_m, 0_m, 180_deg}, // 3_m, -1_m, 0_deg is the
+      frc::Pose2d{5.87_m, 0_m, 0_deg}, // 3_m, 1_m, 0_deg
       // 3_m, 0_m, -1_deg = no swerving, just forward
       // Pass the config
       

@@ -131,7 +131,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
       DriveConstants::kRotationalSlewRate / 1_s};
   double m_prevTime = wpi::Now() * 1e-6;
   // Smart Dashboard Chooser
-  frc::SendableChooser<std::string> m_chooser;
+  //frc::SendableChooser<std::string> m_chooser;
   const std::string kAutoNameDefault = "Side starting position autonomous program";
   const std::string kAutoNameCenter = "Center starting position autonomous program";
   std::string m_autoSelected;
