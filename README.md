@@ -1,4 +1,4 @@
-# MAXSwerve C++ Template v2025.1 - GadgetGirls Edition
+# MAXSwerve C++ Template v2025.1 - GadgetGirls Edition Plus
 
 See [the online changelog](https://github.com/REVrobotics/MAXSwerve-Cpp-Template/blob/main/CHANGELOG.md) for information about updates to the template that may have been released since you created your project.
 
