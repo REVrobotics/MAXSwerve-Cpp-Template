@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <rev/CANSparkMax.h>
+#include <rev/SparkMax.h>
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
@@ -60,10 +60,6 @@ constexpr int kRearRightTurningCanId = 2;//4;
 }  // namespace DriveConstants
 
 namespace ModuleConstants {
-// Invert the turning encoder, since the output shaft rotates in the opposite
-// direction of the steering motor in the MAXSwerve Module.
-constexpr bool kTurningEncoderInverted = true;
-
 // The MAXSwerve module can be configured with one of three pinion gears: 12T,
 // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
 // more teeth will result in a robot that drives faster).
