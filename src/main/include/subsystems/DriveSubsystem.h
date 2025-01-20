@@ -6,7 +6,7 @@
 
 #include <frc/SPI.h>
 #include <frc/ADIS16470_IMU.h>
-#include <AHRS.h>
+#include <studica/AHRS.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
@@ -117,7 +117,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
  //frc::ADIS16470_IMU m_gyro;
   
   // NavX gyro
-  AHRS navx_gyro{frc::SPI::kMXP};
+  studica::AHRS navx{studica::AHRS::NavXComType::kMXP_SPI};
 
   // Slew rate filter variables for controlling lateral acceleration
   double m_currentRotation = 0.0;

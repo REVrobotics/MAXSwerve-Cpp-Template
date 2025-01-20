@@ -1,5 +1,5 @@
-#include <rev/CANSparkMax.h>
-#include <rev/CANSparkLowLevel.h>
+#include <rev/SparkMax.h>
+#include <rev/SparkLowLevel.h>
 #include "subsystems/ShooterSubsystem.h"
 #include "Constants.h"
 

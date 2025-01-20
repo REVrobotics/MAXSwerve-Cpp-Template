@@ -1,7 +1,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <rev/CANSparkMax.h>
+#include <rev/SparkMax.h>
 #include <rev/SparkRelativeEncoder.h>
 
 #include "Constants.h"
@@ -49,14 +49,14 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   // frc2::Trigger m_operatorRightBumper m_operatorController.RightBumper();
 
   // Intake raise/lower motor
-  rev::CANSparkMax m_intakeRaiseLowerMotor{IntakeSubsystemConstants::kIntakeRaiseLowerCANId,
-                                             rev::CANSparkLowLevel::MotorType::kBrushless};
+  rev::spark::SparkMax m_intakeRaiseLowerMotor{IntakeSubsystemConstants::kIntakeRaiseLowerCANId,
+                                             rev::spark::SparkLowLevel::MotorType::kBrushless};
   
-  rev::SparkRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder(rev::SparkRelativeEncoder::Type::kHallSensor, 42);
+  rev::spark::SparkRelativeEncoder m_intakeRaiseLowerEncoder = m_intakeRaiseLowerMotor.GetEncoder();
 
   // Intake roller motor
-  rev::CANSparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
-                                             rev::CANSparkLowLevel::MotorType::kBrushless};
+  rev::spark::SparkMax m_intakeRollerMotor{IntakeSubsystemConstants::kIntakeRollerCANId,
+                                             rev::spark::SparkLowLevel::MotorType::kBrushless};
                           
   // Deployed intake position value from encoder
   // TODO - determine correct value

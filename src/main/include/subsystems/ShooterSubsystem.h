@@ -1,7 +1,7 @@
 #pragma once
 
 #include <frc2/command/SubsystemBase.h>
-#include <rev/CANSparkMax.h>
+#include <rev/SparkMax.h>
 #include "Constants.h"
 
 class ShooterSubsystem : public frc2::SubsystemBase {
@@ -27,6 +27,6 @@ class ShooterSubsystem : public frc2::SubsystemBase {
 
   // Shooter motor
     // TODO: Change kBrushless to kBrushed if needed when motors are hooked up
-  rev::CANSparkMax m_shooterMotor{ShooterSubsystemConstants::kShooterCANId, 
-                                    rev::CANSparkLowLevel::MotorType::kBrushless};
+  rev::spark::SparkMax m_shooterMotor{ShooterSubsystemConstants::kShooterCANId, 
+                                    rev::spark::SparkLowLevel::MotorType::kBrushless};
 };
