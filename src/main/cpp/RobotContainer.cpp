@@ -3,7 +3,8 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "RobotContainer.h"
-
+//#include "subsystems/LEDSubsystem.h"
+#include <frc/LEDPattern.h>
 #include <frc/controller/PIDController.h>
 #include <frc/geometry/Translation2d.h>
 #include <frc/shuffleboard/Shuffleboard.h>
@@ -32,6 +33,12 @@ RobotContainer::RobotContainer() {
   ConfigureButtonBindings();
   timer0.Reset();
   fieldRelative=false;
+
+/*       // Green LEDs
+        frc::LEDPattern green = frc::LEDPattern::Solid(LEDSubsystem::ColorFlip(frc::Color::kGreen));
+        m_led.RunPattern(green);
+*/
+m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(m_led.ColorFlip(frc::Color::kGreen))));
 
   // Set up default drive command
   // The left stick controls translation of the robot.
@@ -64,10 +71,6 @@ RobotContainer::RobotContainer() {
         if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
-        /* void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
-                           units::meters_per_second_t ySpeed,
-                           units::radians_per_second_t rot,
-                           bool fieldRelative)  */
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
