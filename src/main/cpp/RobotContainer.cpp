@@ -64,14 +64,18 @@ RobotContainer::RobotContainer() {
         if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
+        /* void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot,
+                           bool fieldRelative)  */
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},
-            -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
+            -units::meters_per_second_t{frc::ApplyDeadband(
+                m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
-            fieldRelative, true);
+            true);
       },
       {&m_drive}));
 }

@@ -47,15 +47,15 @@ constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
-constexpr int kFrontLeftDrivingCanId = 7;//9; 
-constexpr int kRearLeftDrivingCanId = 3;//1; 
-constexpr int kFrontRightDrivingCanId = 9;//7; 
-constexpr int kRearRightDrivingCanId = 1;//3; 
+constexpr int kFrontLeftDrivingCanId = 7;
+constexpr int kRearLeftDrivingCanId = 3; 
+constexpr int kFrontRightDrivingCanId = 6; 
+constexpr int kRearRightDrivingCanId = 1; 
 
-constexpr int kFrontLeftTurningCanId = 8;//5; 
-constexpr int kRearLeftTurningCanId = 4;//2;
-constexpr int kFrontRightTurningCanId = 5;//8;
-constexpr int kRearRightTurningCanId = 2;//4;
+constexpr int kFrontLeftTurningCanId = 8; 
+constexpr int kRearLeftTurningCanId = 4;
+constexpr int kFrontRightTurningCanId = 5;
+constexpr int kRearRightTurningCanId = 2;
 
 }  // namespace DriveConstants
 
@@ -109,10 +109,10 @@ constexpr double kTurningFF = 0;
 constexpr double kTurningMinOutput = -1;
 constexpr double kTurningMaxOutput = 1;
 
-constexpr rev::CANSparkMax::IdleMode kDrivingMotorIdleMode =
-    rev::CANSparkMax::IdleMode::kBrake;
-constexpr rev::CANSparkMax::IdleMode kTurningMotorIdleMode =
-    rev::CANSparkMax::IdleMode::kBrake;
+constexpr rev::spark::SparkMax::IdleMode kDrivingMotorIdleMode =
+    rev::spark::SparkMax::IdleMode::kBrake;
+constexpr rev::spark::SparkMax::IdleMode kTurningMotorIdleMode =
+    rev::spark::SparkMax::IdleMode::kBrake;
 
 constexpr units::ampere_t kDrivingMotorCurrentLimit = 40_A;
 constexpr units::ampere_t kTurningMotorCurrentLimit = 20_A;
@@ -142,7 +142,7 @@ namespace OIConstants {
 
 namespace IntakeSubsystemConstants {
     // TODO - set actual CAN IDs
-    constexpr int kIntakeRaiseLowerCANId = 10;
+    constexpr int kIntakeRaiseLowerCANId = 97; // 10;
     constexpr int kIntakeRollerCANId = 98;
     // Also look in IntakeSubsystem.h
 }
