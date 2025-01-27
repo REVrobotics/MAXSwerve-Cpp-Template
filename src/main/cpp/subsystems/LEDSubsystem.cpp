@@ -12,9 +12,11 @@ void LEDSubsystem::Periodic() {
 }
 
 frc2::CommandPtr LEDSubsystem::RunPattern(frc::LEDPattern pattern) {
-    return Run([this, pattern = std::move(pattern)] { pattern.ApplyTo(m_ledBuffer); });
+    return this->Run(
+        [this, pattern = std::move(pattern)] { pattern.ApplyTo(m_ledBuffer); });
 }
 
-constexpr frc::Color LEDSubsystem::ColorFlip(const frc::Color inputcolor){
+// Our LED strip has the red and green wires flipped, so swap the R and G values in the color
+frc::Color ColorFlip(frc::Color inputcolor){
     return frc::Color(inputcolor.green, inputcolor.red, inputcolor.blue);
 }

@@ -3,14 +3,16 @@
 #include <frc/LEDPattern.h>
 #include <frc/util/Color.h>
 
+#pragma once
+
+frc::Color ColorFlip(frc::Color inputcolor);
+
 class LEDSubsystem : public frc2::SubsystemBase {
     public:
         LEDSubsystem();
         void Periodic() override;
         
         frc2::CommandPtr RunPattern(frc::LEDPattern pattern);
-        
-        constexpr frc::Color ColorFlip(const frc::Color inputcolor);
 
     private:
         static constexpr int kPort = 9;

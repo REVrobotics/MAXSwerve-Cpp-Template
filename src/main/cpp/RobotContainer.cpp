@@ -3,7 +3,6 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include "RobotContainer.h"
-//#include "subsystems/LEDSubsystem.h"
 #include <frc/LEDPattern.h>
 #include <frc/controller/PIDController.h>
 #include <frc/geometry/Translation2d.h>
@@ -23,6 +22,7 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/LEDSubsystem.h"
 
 using namespace DriveConstants;
 
@@ -34,11 +34,8 @@ RobotContainer::RobotContainer() {
   timer0.Reset();
   fieldRelative=false;
 
-/*       // Green LEDs
-        frc::LEDPattern green = frc::LEDPattern::Solid(LEDSubsystem::ColorFlip(frc::Color::kGreen));
-        m_led.RunPattern(green);
-*/
-m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(m_led.ColorFlip(frc::Color::kGreen))));
+  // Set the LEDs to run Green
+  m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
 
   // Set up default drive command
   // The left stick controls translation of the robot.
