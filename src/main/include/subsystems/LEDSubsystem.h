@@ -3,18 +3,20 @@
 #include <frc/LEDPattern.h>
 #include <frc/util/Color.h>
 
+#pragma once
+
+frc::Color ColorFlip(frc::Color inputcolor);
+
 class LEDSubsystem : public frc2::SubsystemBase {
     public:
         LEDSubsystem();
         void Periodic() override;
-        
+        void ApplyPattern(frc::LEDPattern pattern);
         frc2::CommandPtr RunPattern(frc::LEDPattern pattern);
-        
-        constexpr frc::Color ColorFlip(const frc::Color inputcolor);
 
     private:
         static constexpr int kPort = 9;
-        static constexpr int kLength = 299;
+        static constexpr int kLength = 300;
         frc::AddressableLED m_led{kPort};
         std::array<frc::AddressableLED::LEDData, kLength> m_ledBuffer;
 };
