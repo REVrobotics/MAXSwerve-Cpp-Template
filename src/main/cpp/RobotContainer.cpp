@@ -22,6 +22,7 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
 
 using namespace DriveConstants;
@@ -33,6 +34,8 @@ RobotContainer::RobotContainer() {
   ConfigureButtonBindings();
   timer0.Reset();
   fieldRelative=false;
+
+  m_elevator.SetDefaultCommand(m_elevator.RunSetSpeed(m_operatorController.GetLeftY()));
 
   // Set the LEDs to run Green
   m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));

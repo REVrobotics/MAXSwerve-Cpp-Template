@@ -18,6 +18,7 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
 // #include "subsystems/ShooterSubsystem.h"
@@ -74,6 +75,7 @@ private:
 
   // The robot's subsystems
   DriveSubsystem m_drive;
+  ElevatorSubsystem m_elevator;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
  // ShooterSubsystem m_shooter;

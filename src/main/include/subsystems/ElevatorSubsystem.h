@@ -1,4 +1,6 @@
-// Declase a Subsystem to operate the 2025 intake elevator
+// Declare a Subsystem to operate the 2025 intake elevator
+
+#pragma once
 
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkLowLevel.h>
@@ -22,21 +24,26 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         /***
          * Methods that return a CommandPtr to a thing that does the thing
          ***/
+        frc2::CommandPtr ElevatorSubsystem::RunSetSpeed(double speed);
+
         // Possible future methods to move to preset positions: trough, first coral, 2nd coral, receive-from-human-player
 
     private:
         /***
          * Internal data to the subsystem
          */
-        const int kElevatorLeftMotorCANId {99};  // TODO - set the real CANbus ID
-        const int kElevatorRightMotorCANId {98};  // TODO - set the real CANbus ID
+        const int kElevatorLeftMotorCANId {12};
+        const int kElevatorRightMotorCANId {9};
+        const int kLimitSwitchChannel {9};
         
         /* Need 2 rev::Spark::SparkMax motors.
           These will need to be set so that one follows the other in reverse */
-        rev::spark::SparkMax m_elevatorRaiseLowerMotor{kElevatorLeftMotorCANId, 
+        rev::spark::SparkMax m_elevatorRaiseLowerMotor {kElevatorLeftMotorCANId, 
                                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
-        rev::spark::SparkMax m_elevatorRaiseLowerFollowerMotor{kElevatorRightMotorCANId, 
+        /* rev::spark::SparkMax m_elevatorRaiseLowerFollowerMotor{kElevatorRightMotorCANId, 
                                                     rev::spark::SparkLowLevel::MotorType::kBrushless};
+        */
         // Need one or two Limit switches to tell us when the elevator needs to stop at the top/bottom
-        frc::DigitalInput m_topLimitSwitch {99};  // TODO - set the real digital input channel id
+        frc::DigitalInput m_topLimitSwitch {kLimitSwitchChannel};
+
 };
