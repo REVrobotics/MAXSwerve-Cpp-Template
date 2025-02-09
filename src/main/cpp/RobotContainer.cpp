@@ -35,7 +35,7 @@ RobotContainer::RobotContainer() {
   timer0.Reset();
   fieldRelative=false;
 
-  m_elevator.SetDefaultCommand(m_elevator.RunSetSpeed(m_operatorController.GetLeftY()));
+  m_elevator.SetDefaultCommand(m_elevator.runSetSpeed(m_operatorController.GetLeftY()));
 
   // Set the LEDs to run Green
   m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));

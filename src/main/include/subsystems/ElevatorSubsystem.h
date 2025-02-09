@@ -2,6 +2,7 @@
 
 #pragma once
 
+#include <frc/DigitalInput.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkLowLevel.h>
 #include <rev/SparkMax.h>
@@ -11,6 +12,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
     public:
         // Constructor
         ElevatorSubsystem();
+        
+        // Destructor
+        ~ElevatorSubsystem();
 
         // Actions to take regularly as the robot runs
         void Periodic() override;
@@ -24,7 +28,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         /***
          * Methods that return a CommandPtr to a thing that does the thing
          ***/
-        frc2::CommandPtr ElevatorSubsystem::RunSetSpeed(double speed);
+        frc2::CommandPtr runSetSpeed(double speed);
 
         // Possible future methods to move to preset positions: trough, first coral, 2nd coral, receive-from-human-player
 
