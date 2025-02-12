@@ -21,7 +21,7 @@ void ElevatorSubsystem::Periodic(){
 // Set the Elevator motor speeds to raise or lower
 void ElevatorSubsystem::setSpeed(double speed){
         if (speed > 0){
-                if (m_topLimitSwitch.Get() == true){
+                if (m_topLimitSwitch.Get() == false){
                         m_elevatorRaiseLowerMotor.Set(0);
                 } else {
                         m_elevatorRaiseLowerMotor.Set(speed);
