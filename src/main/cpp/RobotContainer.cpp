@@ -35,7 +35,14 @@ RobotContainer::RobotContainer() {
   timer0.Reset();
   fieldRelative=false;
 
-  m_elevator.SetDefaultCommand(m_elevator.runSetSpeed(m_operatorController.GetLeftY()));
+  m_elevator.SetDefaultCommand(frc2::RunCommand(
+    [this] {
+        double opctlr_left_y = -m_operatorController.GetLeftY();
+        frc::SmartDashboard::PutNumber("OperatorCtlr LeftY", opctlr_left_y);
+        m_elevator.setSpeed(opctlr_left_y);
+    },
+    {&m_elevator}
+  ));
 
   // Set the LEDs to run Green
   m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
@@ -71,10 +78,6 @@ RobotContainer::RobotContainer() {
         if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
-        // Check if we need to move the Elevator
-        double xbox_left_y = -m_operatorController.GetLeftY();
-        frc::SmartDashboard::PutNumber("Xbox Left Stick", button3_result);
-        m_elevator.setSpeed(xbox_left_y);  // May need to apply Deadband
 
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
@@ -85,7 +88,7 @@ RobotContainer::RobotContainer() {
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
             true);
       },
-      {&m_drive, &m_elevator}));
+      {&m_drive}));
 }
 
 void RobotContainer::ConfigureButtonBindings() {
