@@ -71,6 +71,11 @@ RobotContainer::RobotContainer() {
         if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
+        // Check if we need to move the Elevator
+        double xbox_left_y = -m_operatorController.GetLeftY();
+        frc::SmartDashboard::PutNumber("Xbox Left Stick", button3_result);
+        m_elevator.setSpeed(xbox_left_y);  // May need to apply Deadband
+
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
@@ -80,7 +85,7 @@ RobotContainer::RobotContainer() {
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
             true);
       },
-      {&m_drive}));
+      {&m_drive, &m_elevator}));
 }
 
 void RobotContainer::ConfigureButtonBindings() {
