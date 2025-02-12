@@ -36,8 +36,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         /***
          * Internal data to the subsystem
          */
-        const int kElevatorLeftMotorCANId {12};
-        const int kElevatorRightMotorCANId {9};
+        const int kElevatorLeftMotorCANId {9};
+        const int kElevatorRightMotorCANId {12};
         const int kLimitSwitchChannel {9};
         
         /* Need 2 rev::Spark::SparkMax motors.
