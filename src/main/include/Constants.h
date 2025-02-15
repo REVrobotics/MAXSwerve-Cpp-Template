@@ -151,3 +151,4 @@ namespace ShooterSubsystemConstants {
     // TODO - Set actual CAN ID
     constexpr int kShooterCANId = 97;
 }
+

@@ -37,6 +37,10 @@ DriveSubsystem::DriveSubsystem()
 }
 
 void DriveSubsystem::Periodic() {
+units::meter_t ultra_measurment = m_ultrasonic.GetRange();
+frc::SmartDashboard::PutNumber("ultrasonicmeasurment", double(ultra_measurment));
+// units::millimeter_t filteredMeasurement = m_filter.Calculate(measerment)
+
   frc::SmartDashboard::PutNumber("MXP Gyro Angle", -navx.GetAngle());
   // frc::SmartDashboard::PutNumber("ADIS16470 Gyro Angle",  -m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ).value());
   

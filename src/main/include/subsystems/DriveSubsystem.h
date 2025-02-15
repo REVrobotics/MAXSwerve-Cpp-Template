@@ -14,6 +14,9 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/Ultrasonic.h>
+#include <frc/AnalogInput.h>
+#include <frc/AnalogPotentiometer.h>
 
 #include "Constants.h"
 #include "MAXSwerveModule.h"
@@ -138,4 +141,10 @@ class DriveSubsystem : public frc2::SubsystemBase {
   // Odometry class for tracking robot pose
   // 4 defines the number of modules
   frc::SwerveDriveOdometry<4> m_odometry;
+
+  static constexpr int kUltrasonicPingPort = 1;
+  static constexpr int kUlterasonicEchoPort = 0;
+ // frc::Ultrasonic m_ultrasonic{kUltrasonicPingPort, kUlterasonicEchoPort};
+   frc::AnalogInput ultrasonic_input(0);
+   frc::AnalogPotentiometer ultrasonic_pot{0,180,30};
 };
