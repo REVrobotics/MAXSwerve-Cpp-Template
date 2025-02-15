@@ -16,6 +16,7 @@
 #include <frc2/command/RunCommand.h>
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
 // #include "subsystems/ShooterSubsystem.h"
@@ -35,20 +36,11 @@ private:
  
   // The driver's controller
   frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
-  // The operator's controller - was called m_shooterController, but also controls intake
-  frc2::CommandXboxController m_operatorController{OIConstants::kDriverControllerPort};
-  // Left stick controls shooter "out" (forward Y) and "in" (backward Y)
-  // double frc::XboxController::GetLeftY	(		)	const
+
+  // The operator's controller:
+  // - Left stick up/down controls elevator
+  frc2::CommandXboxController m_operatorController{OIConstants::kOperatorControllerPort};
   
-  /* Version A: Trigger based on movement of stick - a little experimental
-  // Right stick controls intake raise (backward Y) and lower (forward Y)
-  // TODO: Make the getRightY() thresholds a k constant (right now 0.5)
-  frc2::Trigger m_rightStickForward = frc2::Trigger([this]{ return (m_operatorController.GetRightY() > 0.5); });
-  frc2::Trigger m_rightStickBackward = frc2::Trigger([this]{ return (m_operatorController.GetRightY() < -0.5); });
-  */
-  // Version B: X button deploys intake, Y button retracts it
-  frc2::Trigger m_operatorXButton = m_operatorController.X();
-  frc2::Trigger m_operatorYButton = m_operatorController.Y();
   // Left bumper controls intake "in" - in while pressed?
   frc2::Trigger m_operatorLeftBumper = m_operatorController.LeftBumper();
   // Right bumper controls intoke "out" - out while pressed?
@@ -61,6 +53,7 @@ private:
   // The robot's subsystems and commands are defined here...
   // The robot's subsystems
   DriveSubsystem m_drive;
+  ElevatorSubsystem m_elevator;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
  // ShooterSubsystem m_shooter;
