@@ -42,7 +42,7 @@ private:
   frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
 
   // The operator's controller - was called m_shooterController, but also controls intake
-  frc2::CommandXboxController m_operatorController{OIConstants::kDriverControllerPort};
+  frc2::CommandXboxController m_operatorController{OIConstants::kOperatorControllerPort};
 
   // Left stick controls shooter "out" (forward Y) and "in" (backward Y)
   // double frc::XboxController::GetLeftY	(		)	const
