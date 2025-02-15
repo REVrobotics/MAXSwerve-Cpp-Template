@@ -22,6 +22,7 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
 
 using namespace DriveConstants;
@@ -33,6 +34,15 @@ RobotContainer::RobotContainer() {
   ConfigureButtonBindings();
   timer0.Reset();
   fieldRelative=false;
+
+  m_elevator.SetDefaultCommand(frc2::RunCommand(
+    [this] {
+        double opctlr_left_y = -m_operatorController.GetLeftY();
+        frc::SmartDashboard::PutNumber("OperatorCtlr LeftY", opctlr_left_y);
+        m_elevator.setSpeed(opctlr_left_y);
+    },
+    {&m_elevator}
+  ));
 
   // Set the LEDs to run Green
   m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
@@ -67,6 +77,7 @@ RobotContainer::RobotContainer() {
         
         if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
+
 
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(

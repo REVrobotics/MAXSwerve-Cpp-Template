@@ -18,6 +18,7 @@
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
+#include "subsystems/ElevatorSubsystem.h"
 #include "subsystems/IntakeSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
 // #include "subsystems/ShooterSubsystem.h"
@@ -41,7 +42,7 @@ private:
   frc::Joystick m_driverController{OIConstants::kDriverControllerPort};
 
   // The operator's controller - was called m_shooterController, but also controls intake
-  frc2::CommandXboxController m_operatorController{OIConstants::kDriverControllerPort};
+  frc2::CommandXboxController m_operatorController{OIConstants::kOperatorControllerPort};
 
   // Left stick controls shooter "out" (forward Y) and "in" (backward Y)
   // double frc::XboxController::GetLeftY	(		)	const
@@ -74,6 +75,7 @@ private:
 
   // The robot's subsystems
   DriveSubsystem m_drive;
+  ElevatorSubsystem m_elevator;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
  // ShooterSubsystem m_shooter;
