@@ -2,7 +2,9 @@
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
+
 #include "RobotContainer.h"
+
 #include <frc/LEDPattern.h>
 #include <frc/controller/PIDController.h>
 #include <frc/geometry/Translation2d.h>
@@ -17,26 +19,72 @@
 #include <units/angle.h>
 #include <units/velocity.h>
 #include <frc/smartdashboard/SmartDashboard.h>
-
 #include <utility>
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
 #include "subsystems/LEDSubsystem.h"
+#include <frc/RobotController.h>
 
 using namespace DriveConstants;
+using namespace frc;
 
 RobotContainer::RobotContainer() {
   // Initialize all of your commands and subsystems here
-
   // Configure the button bindings
   ConfigureButtonBindings();
   timer0.Reset();
   fieldRelative=false;
 
   // Set the LEDs to run Green
-  m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
+ // m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
 
+  // Our LED strip has a density of 60 LEDs per meter
+  units::meter_t kLedSpacing{1 / 60.0};
+
+  // Create an LED pattern that will display a rainbow across
+  // all hues at maximum saturation and half brightness
+  LEDPattern m_rainbow = LEDPattern::Rainbow(255, 128);
+
+  // Create a new pattern that scrolls the rainbow pattern across the LED
+  // strip, moving at a speed of 1 meter per second.
+  frc::LEDPattern m_scrollingRainbow = m_rainbow.ScrollAtAbsoluteSpeed(.5_mps, kLedSpacing);
+  //m_scrollingRainbow = m_rainbow.Breathe(3_s);
+  //m_scrollingRainbow = m_rainbow.Mask();
+
+  // Create an LED pattern that displays a red-to-blue gradient.
+// The LED strip will be red at both ends and blue in the center,
+// with smooth gradients between
+std::array<Color, 2> colors{ColorFlip(Color::kRed), ColorFlip(Color::kBlue)};
+LEDPattern gradient = LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
+std::array<std::pair<double, Color>, 2> colorSteps{std::pair{0.0, ColorFlip(Color::kRed)},
+                                                   std::pair{0.5, Color::kBlue}};
+LEDPattern steps = LEDPattern::Steps(colorSteps);
+
+//std::array<Color, 2> colors{ColorFlip(Color::kRed), Color::kBlue};
+//LEDPattern base = LEDPattern::LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
+LEDPattern base = LEDPattern::Steps(colorSteps);
+LEDPattern pattern = base.ScrollAtRelativeSpeed(units::hertz_t{0.25});
+LEDPattern absolute = base.ScrollAtAbsoluteSpeed(0.125_mps, units::meter_t{1/120.0});
+//LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::IsSysActive(); });
+LEDPattern sycned = base.SynchronizedBlink([]() { return RobotController::GetRSLState(); });
+//m_led.SetDefaultCommand(m_led.RunPattern(sycned));
+
+m_led.SetDefaultCommand(frc2::RunCommand(
+    [this] {
+        SmartDashboard::PutNumber("preThrottle",button3_result);
+        button3_result = m_driverController.GetThrottle();
+        button3_result--;
+        button3_result = button3_result * -1;
+        SmartDashboard::PutNumber("Throttle",button3_result);
+
+        std::array<Color, 2> colors{ColorFlip(Color::kRed), ColorFlip(Color::kBlue)};
+        LEDPattern gradient = LEDPattern::Gradient(LEDPattern::GradientType::kDiscontinuous, colors);
+        gradient = gradient.AtBrightness(button3_result);
+        m_led.ApplyPattern(gradient);
+    },
+    {&m_led}));    
+      
   // Set up default drive command
   // The left stick controls translation of the robot.
   // Turning is controlled by the X axis of the right stick.
@@ -53,6 +101,10 @@ RobotContainer::RobotContainer() {
         button3_result = button3_result * -1;
         // frc::SmartDashboard::PutNumber("Adjusted Throttle", button3_result);
         throttle_percentage = button3_result * 0.5;
+        SmartDashboard::PutNumber("Throttle2",throttle_percentage);
+
+
+
         // Below a certain percentage the robot won't move at all.  Don't
         // let the throttle below this value.
         if (throttle_percentage < 0.15) {throttle_percentage = 0.15;}
@@ -68,6 +120,10 @@ RobotContainer::RobotContainer() {
         if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
+        /* void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
+                           units::meters_per_second_t ySpeed,
+                           units::radians_per_second_t rot,
+                           bool fieldRelative)  */
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
@@ -79,7 +135,6 @@ RobotContainer::RobotContainer() {
       },
       {&m_drive}));
 }
-
 void RobotContainer::ConfigureButtonBindings() {
   // Why do we have an XboxController button with a Joystick?
   // Conflicts with other use of kRightBumper in operatorController
@@ -92,35 +147,28 @@ void RobotContainer::ConfigureButtonBindings() {
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
   m_operatorController.LeftBumper().OnTrue(m_intake.rollIn());
-
   // Start / stop intake rollers in the "out" direction
   m_operatorController.RightBumper().OnTrue(m_intake.rollOut());
-
   /* Version A: Stick-based intake deploy/retract 
   // If right stick Y axis is pressed forward, deploy intake
   m_rightStickForward.OnTrue(m_intake.deploy());
-
   // If right stick Y axis is pressed backward, raise intake
   m_rightStickBackward.OnTrue(m_intake.retract());
   */
-
   // Version B: X,Y button intake deploy/retract
   m_operatorXButton.OnTrue(m_intake.deploy());
   m_operatorYButton.OnTrue(m_intake.retract());
 }
-
 frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
                                AutoConstants::kMaxAcceleration/2);
   // Add kinematics to ensure max speed is actually obeyed
   config.SetKinematics(m_drive.kDriveKinematics);
-
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc_1_1_trajectory_generator.html
   auto exampleTrajectory = frc::TrajectoryGenerator::GenerateTrajectory(
       // Start at the origin facing the +X direction
       frc::Pose2d{0_m, 0_m, 0_deg},
-
       // waypoint 
       //WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
@@ -128,7 +176,6 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       {frc::Translation2d{2_m, 0_m},
       frc::Translation2d{4_m, 0_m}},
       // {},  // No internal waypoints (empty vector)
-
       // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
       frc::Pose2d{5.87_m, 0_m, 0_deg}, // 3_m, 1_m, 0_deg
@@ -136,33 +183,24 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       // Pass the config
       
       config);
-
   frc::ProfiledPIDController<units::radians> thetaController{
       AutoConstants::kPThetaController, 0, 0,
       AutoConstants::kThetaControllerConstraints};
-
   thetaController.EnableContinuousInput(units::radian_t{-std::numbers::pi},
                                         units::radian_t{std::numbers::pi});
-
   // https://github.wpilib.org/allwpilib/docs/release/cpp/classfrc2_1_1_swerve_controller_command.html
   frc2::SwerveControllerCommand<4> swerveControllerCommand(
       exampleTrajectory, 
       
       [this]() { return m_drive.GetPose(); },
-
       m_drive.kDriveKinematics,
-
       frc::PIDController{AutoConstants::kPXController, 0, 0},
       frc::PIDController{AutoConstants::kPYController, 0, 0}, 
       thetaController,
-
       [this](auto moduleStates) { m_drive.SetModuleStates(moduleStates); },
-
       {&m_drive});
-
   // Reset odometry to the starting pose of the trajectory.
   m_drive.ResetOdometry(exampleTrajectory.InitialPose());
-
   // Run swerveControllerCommand above to drive the trajectory, 
   // then run InstantCommand to stop
   return new frc2::SequentialCommandGroup(
@@ -170,5 +208,3 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       frc2::InstantCommand(
           [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }, {}));
 }
-
-
