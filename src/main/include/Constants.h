@@ -140,13 +140,6 @@ namespace OIConstants {
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
 
-namespace IntakeSubsystemConstants {
-    // TODO - set actual CAN IDs
-    constexpr int kIntakeRaiseLowerCANId = 97; // 10;
-    constexpr int kIntakeRollerCANId = 98;
-    // Also look in IntakeSubsystem.h
-}
-
 namespace ShooterSubsystemConstants {
     // TODO - Set actual CAN ID
     constexpr int kShooterCANId = 97;

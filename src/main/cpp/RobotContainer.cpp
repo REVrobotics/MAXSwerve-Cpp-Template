@@ -14,6 +14,7 @@
 #include <frc2/command/StartEndCommand.h>
 #include <frc2/command/SwerveControllerCommand.h>
 #include <frc2/command/button/JoystickButton.h>
+#include <frc2/command/Subsystem.h>
 #include <units/angle.h>
 #include <units/velocity.h>
 #include <frc/smartdashboard/SmartDashboard.h>
@@ -35,6 +36,7 @@ RobotContainer::RobotContainer() {
   timer0.Reset();
   fieldRelative=false;
 
+  // Initialize elevator and set to be controlled by Operator XBoxController Left stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(
     [this] {
         double opctlr_left_y = -m_operatorController.GetLeftY();
@@ -43,6 +45,15 @@ RobotContainer::RobotContainer() {
     },
     {&m_elevator}
   ));
+  
+  // Initialize intake subsystem - nothing to do here right now
+   /* m_intake.SetDefaultCommand(frc2::RunCommand(
+    [this] {
+        // Do stuff
+    },
+    {&m_intake}
+  ));
+  */
 
   // Set the LEDs to run Green
   m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
@@ -91,33 +102,21 @@ RobotContainer::RobotContainer() {
       {&m_drive}));
 }
 
-void RobotContainer::ConfigureButtonBindings() {
-  // Why do we have an XboxController button with a Joystick?
-  // Conflicts with other use of kRightBumper in operatorController
-  /*
-  frc2::JoystickButton(&m_driverController,
-                       frc::XboxController::Button::kRightBumper)
-      .WhileTrue(new frc2::RunCommand([this] { m_drive.SetX(); }, {&m_drive}));
-  */
-  
+void RobotContainer::ConfigureButtonBindings() {  
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
-  m_operatorController.LeftBumper().OnTrue(m_intake.rollIn());
+  m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
+    [this] {
+        m_intake.rollIn();
+    }
+  ));
 
   // Start / stop intake rollers in the "out" direction
-  m_operatorController.RightBumper().OnTrue(m_intake.rollOut());
-
-  /* Version A: Stick-based intake deploy/retract 
-  // If right stick Y axis is pressed forward, deploy intake
-  m_rightStickForward.OnTrue(m_intake.deploy());
-
-  // If right stick Y axis is pressed backward, raise intake
-  m_rightStickBackward.OnTrue(m_intake.retract());
-  */
-
-  // Version B: X,Y button intake deploy/retract
-  m_operatorXButton.OnTrue(m_intake.deploy());
-  m_operatorYButton.OnTrue(m_intake.retract());
+  m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
+    [this] {
+        m_intake.rollOut();
+    }
+  ));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
