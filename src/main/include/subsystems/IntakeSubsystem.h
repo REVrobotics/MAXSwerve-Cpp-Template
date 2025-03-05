@@ -28,7 +28,8 @@ class IntakeSubsystem : public frc2::SubsystemBase {
  private:
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
-  const int kIntakeRollerCANId = 10; // TODO - set real CANId
+  // WNF This appears to be the motor connected to the shooter??
+  const int kIntakeRollerCANId = 9; // TODO - set real CANId
 
   // Intake roller motor
   rev::spark::SparkMax m_intakeRollerMotor{kIntakeRollerCANId,
