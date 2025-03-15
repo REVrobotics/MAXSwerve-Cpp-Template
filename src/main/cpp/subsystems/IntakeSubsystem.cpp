@@ -8,8 +8,8 @@
 
 IntakeSubsystem::IntakeSubsystem(){};
 
-void IntakeSubsystem::rollIn(){
-  // Start / stop intake rollers in the "in" direction
+void IntakeSubsystem::rollOut(){
+  // Start / stop intake rollers in the "out" direction
   //
   // If left bumper is pressed once, activate intake "in" direction
   // If left bumper is pressed again, stop intake "in" direction
@@ -25,8 +25,8 @@ void IntakeSubsystem::rollIn(){
 }
 
 
-// Start intake rollers in the "out" direction
-void IntakeSubsystem::rollOut(){
+// Start intake rollers in the "in" direction
+void IntakeSubsystem::rollIn(){
   // If right bumper is pressed once, activate intake "out" direction
   // If right bumper is pressed once, stop intake "out" direction
   // REMEMBER: m_rollerMotorDirection : -1 = IN, 1 = OUT, 0 = STOP (May need to flip IN and OUT)
@@ -37,6 +37,7 @@ void IntakeSubsystem::rollOut(){
     m_rollerMotorOn = true;
   } else {
     stopRollers();
+  
   }
 }
 

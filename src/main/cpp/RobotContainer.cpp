@@ -36,12 +36,12 @@ RobotContainer::RobotContainer() {
   // Configure the button bindings
   ConfigureButtonBindings();
   timer0.Reset();
-  fieldRelative=false;
+  fieldRelative=true;
 
   // Initialize elevator and set to be controlled by Operator XBoxController Left stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(
     [this] {
-        double opctlr_left_y = -m_operatorController.GetLeftY();
+        double opctlr_left_y = -m_operatorController.GetLeftY() * 0.25;
         frc::SmartDashboard::PutNumber("OperatorCtlr LeftY", opctlr_left_y);
         m_elevator.setSpeed(opctlr_left_y);
     },
@@ -135,17 +135,20 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         
         // Pushing buttons 11 and 12 resets the Z axis heading.  This could
         // be useful if the gyro drifts a lot
-        if (m_driverController.GetRawButton(11) && m_driverController.GetRawButton(12))
+        //swapped 7 & 8 with 11 & 12
+        if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { m_drive.ZeroHeading();} 
         
-        if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
+        if (m_driverController.GetRawButton(11) && m_driverController.GetRawButton(12))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
+        
 
+        // NOTE: getY() reversed to deal with directional issue
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
-            -units::meters_per_second_t{frc::ApplyDeadband(
+            units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
@@ -159,14 +162,14 @@ void RobotContainer::ConfigureButtonBindings() {
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
   m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollIn();
+        m_intake.rollOut();
     }
   ));
 
   // Start / stop intake rollers in the "out" direction
   m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollOut();
+        m_intake.rollIn();
     }
   ));
 }
@@ -184,14 +187,15 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       //WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      {frc::Translation2d{2_m, 0_m},
-      frc::Translation2d{4_m, 0_m}},
+      {frc::Translation2d{0.25_m, 0_m},
+      frc::Translation2d{0.5_m, 0_m}},
       // {},  // No internal waypoints (empty vector)
       // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
-      frc::Pose2d{5.87_m, 0_m, 0_deg}, // 3_m, 1_m, 0_deg
-      // 3_m, 0_m, -1_deg = no swerving, just forward
-      // Pass the config
+      frc::Pose2d{5.87_m, 0_m, 0_deg}, 
+      // Testing pose (short distance) = 1_m, 0_m, 0_deg
+      // Josephine & Will's numbers = 4.5_m, 0_m, 0_deg
+      // Phil's numbers based on Game Manual = 5.87_m, 0_m, 0_deg
       
       config);
   frc::ProfiledPIDController<units::radians> thetaController{
@@ -217,5 +221,8 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   return new frc2::SequentialCommandGroup(
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
-          [this]() { m_drive.Drive(0_mps, 0_mps, 0_rad_per_s, false); }, {}));
+          [this]() { m_drive.Drive(1_mps, 1_mps, 0_rad_per_s, false); }), 
+      frc2::InstantCommand(
+          [this]() { m_intake.rollOut(); })
+          );
 }
