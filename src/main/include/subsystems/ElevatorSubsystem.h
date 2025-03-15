@@ -24,7 +24,8 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
          ***/
         // Need method to raise/lower (move!) elevator (positive == up, negative == down)
         void setSpeed(double speed);
-        
+        void runForTime(units::second_t seconds, double speed);
+
         /***
          * Methods that return a CommandPtr to a thing that does the thing
          ***/
