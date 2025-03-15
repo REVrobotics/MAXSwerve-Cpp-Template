@@ -56,7 +56,6 @@ private:
   ElevatorSubsystem m_elevator;
   IntakeSubsystem m_intake;
   LEDSubsystem m_led;
- // ShooterSubsystem m_shooter;
 
   // The chooser for the autonomous routines
   frc::SendableChooser<frc2::Command*> m_chooser;
