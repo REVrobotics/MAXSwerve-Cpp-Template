@@ -45,10 +45,10 @@ private:
   // - Left stick up/down controls elevator
   frc2::CommandXboxController m_operatorController{OIConstants::kOperatorControllerPort};
   
-  // Left bumper controls intake "in" - in while pressed?
+  // Left bumper controls intake "out" - in while pressed
   frc2::Trigger m_operatorLeftBumper = m_operatorController.LeftBumper();
 
-  // Right bumper controls intoke "out" - out while pressed?
+  // Right bumper controls intake "in" - out while pressed
   frc2::Trigger m_operatorRightBumper = m_operatorController.RightBumper();
 
   // When set the robot goes at full throttle.  When clear full throttle is scaled down by

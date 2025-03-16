@@ -42,9 +42,9 @@ void ElevatorSubsystem::runForTime(units::second_t seconds, double speed){
     frc::Timer timer = frc::Timer();
     timer.Start();
     while (!timer.HasElapsed(seconds)){
-        setSpeed(0);
+        setSpeed(speed);
     }
-    setSpeed(speed);
+    setSpeed(0);
 }
 
 

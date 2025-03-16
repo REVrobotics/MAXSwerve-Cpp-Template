@@ -34,7 +34,7 @@ RobotContainer::RobotContainer() {
   // Configure the button bindings
   ConfigureButtonBindings();
   timer0.Reset();
-  fieldRelative=true;
+  fieldRelative=false;
 
   // Initialize elevator and set to be controlled by Operator XBoxController Left stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(
@@ -100,7 +100,7 @@ RobotContainer::RobotContainer() {
                 m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
-            true);
+            false);
       },
       {&m_drive}));
 }
