@@ -27,7 +27,7 @@ DriveSubsystem::DriveSubsystem()
       m_odometry{kDriveKinematics,
                  frc::Rotation2d(units::radian_t{
                      //-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
-                     units::degree_t{-navx.GetAngle()}}),
+                     units::degree_t{-navx.GetAngle()}}), //-navx
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
                  frc::Pose2d{}} {
@@ -64,7 +64,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
       rot.value() * DriveConstants::kMaxAngularSpeed;
 
   auto states = kDriveKinematics.ToSwerveModuleStates(
-      fieldRelative
+      false
           ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 frc::Rotation2d(units::radian_t{
@@ -72,6 +72,8 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                     units::degree_t{-navx.GetAngle()}}))
           : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
 
+  frc::SmartDashboard::PutNumber("Navx Angle", navx.GetAngle());
+  frc::SmartDashboard::PutNumber("Swerve Field Relative", fieldRelative);
   kDriveKinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
 
   auto [fl, fr, bl, br] = states;

@@ -71,9 +71,12 @@ RobotContainer::RobotContainer() {
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
+            -units::meters_per_second_t{frc::ApplyDeadband(
+                m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
-            true);
+            fieldRelative);
+            frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
       },
       {&m_drive}));
 }
@@ -100,6 +103,9 @@ void RobotContainer::ConfigureButtonBindings() {
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
+    // Raise the elevator
+    m_elevator.setSpeed(1);
+
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
                                AutoConstants::kMaxAcceleration/2);
@@ -115,15 +121,15 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       //WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      {frc::Translation2d{0.25_m, 0_m},
-      frc::Translation2d{0.5_m, 0_m}},
+      {frc::Translation2d{1_m, 0_m},
+      frc::Translation2d{2_m, 0_m}},
       // {},  // No internal waypoints (empty vector)
 
       // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
-      frc::Pose2d{5.87_m, 0_m, 0_deg}, 
+      frc::Pose2d{3_m, 0_m, 0_deg}, 
       // Testing pose (short distance) = 1_m, 0_m, 0_deg
-      // Josephine & Will's numbers = 4.5_m, 0_m, 0_deg
+      // Josephine & Will's numbers = 3_m, 0_m, 0_deg
       // Phil's numbers based on Game Manual = 5.87_m, 0_m, 0_deg
       
       config);
@@ -157,9 +163,12 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Run swerveControllerCommand above to drive the trajectory, 
   // then run InstantCommand to stop
   return new frc2::SequentialCommandGroup(
+      frc2::InstantCommand(
+        [this]() { m_elevator.runForTime(units::second_t{4}, 1); }
+      ),
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
-          [this]() { m_drive.Drive(1_mps, 1_mps, 0_rad_per_s, false); }), 
+          [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }), 
       frc2::InstantCommand(
           [this]() { m_intake.rollOut(); })
           );

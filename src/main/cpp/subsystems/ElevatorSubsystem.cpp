@@ -37,6 +37,17 @@ void ElevatorSubsystem::setSpeed(double speed){
     }
 };
 
+
+void ElevatorSubsystem::runForTime(units::second_t seconds, double speed){
+    frc::Timer timer = frc::Timer();
+    timer.Start();
+    while (!timer.HasElapsed(seconds)){
+        setSpeed(speed);
+    }
+    setSpeed(0);
+}
+
+
 // Package the setSpeed method for use as a Command
 frc2::CommandPtr ElevatorSubsystem::runSetSpeed(double speed) {
     return this->Run(
