@@ -27,28 +27,26 @@ DriveSubsystem::DriveSubsystem()
       m_odometry{kDriveKinematics,
                  frc::Rotation2d(units::radian_t{
                      //-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
-                     units::degree_t{-navx_gyro.GetAngle()}}),
+                     units::degree_t{-navx.GetAngle()}}),
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
                  frc::Pose2d{}} {
-                 }
-
   // Usage reporting for MAXSwerve template
   //HAL_Report(HALUsageReporting::kResourceType_RobotDrive,
   //           HALUsageReporting::kRobotDriveSwerve_MaxSwerve);
 }
 
 void DriveSubsystem::Periodic() {
-  frc::SmartDashboard::PutNumber("MXP Gyro Angle", -navx_gyro.GetAngle());
+  frc::SmartDashboard::PutNumber("MXP Gyro Angle", -navx.GetAngle());
   // frc::SmartDashboard::PutNumber("ADIS16470 Gyro Angle",  -m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ).value());
   
-  frc::SmartDashboard::PutNumber("MXP Gyro Turn Rate", navx_gyro.GetRate());
+  frc::SmartDashboard::PutNumber("MXP Gyro Turn Rate", navx.GetRate());
   // frc::SmartDashboard::PutNumber("ADIS16470 Gyro Turn Rate", m_gyro.GetRate(frc::ADIS16470_IMU::IMUAxis::kZ).value());
 
   // Implementation of subsystem periodic method goes here.
   m_odometry.Update(frc::Rotation2d(units::radian_t{
                        // -m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
-                       units::degree_t{-navx_gyro.GetAngle()}}),
+                       units::degree_t{-navx.GetAngle()}}),
                     {m_frontLeft.GetPosition(), m_rearLeft.GetPosition(),
                      m_frontRight.GetPosition(), m_rearRight.GetPosition()});
 }
@@ -71,7 +69,7 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 frc::Rotation2d(units::radian_t{
                     //-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}))
-                    units::degree_t{-navx_gyro.GetAngle()}}))
+                    units::degree_t{-navx.GetAngle()}}))
           : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
 
   kDriveKinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
@@ -116,7 +114,7 @@ units::degree_t DriveSubsystem::GetHeading() {
 
   return frc::Rotation2d(
             // units::radian_t{-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}).Degrees();
-            units::radian_t{units::degree_t{-navx_gyro.GetAngle()}}).Degrees();
+            units::radian_t{units::degree_t{-navx.GetAngle()}}).Degrees();
           
 }
       
@@ -124,11 +122,11 @@ units::degree_t DriveSubsystem::GetHeading() {
       
 
 // void DriveSubsystem::ZeroHeading() { m_gyro.Reset(); }
-void DriveSubsystem::ZeroHeading() { navx_gyro.Reset(); }
+void DriveSubsystem::ZeroHeading() { navx.Reset(); }
 
 double DriveSubsystem::GetTurnRate() {
   //return -m_gyro.GetRate(frc::ADIS16470_IMU::IMUAxis::kZ).value();
-  return navx_gyro.GetRate();
+  return navx.GetRate();
 }
 
 frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }
