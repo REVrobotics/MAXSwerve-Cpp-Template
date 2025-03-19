@@ -92,7 +92,6 @@ RobotContainer::RobotContainer() {
 
         
 
-        // NOTE: getY() reversed to deal with directional issue
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
@@ -100,7 +99,8 @@ RobotContainer::RobotContainer() {
                 m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
-            false);
+            fieldRelative);
+            frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
       },
       {&m_drive}));
 }
