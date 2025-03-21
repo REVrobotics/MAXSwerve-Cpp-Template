@@ -148,7 +148,7 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
-            units::meters_per_second_t{frc::ApplyDeadband(
+            -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
