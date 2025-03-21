@@ -36,28 +36,6 @@ RobotContainer::RobotContainer() {
   timer0.Reset();
   fieldRelative=false;
 
-  // Initialize elevator and set to be controlled by Operator XBoxController Left stick
-  m_elevator.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-        double opctlr_left_y = -m_operatorController.GetLeftY() * 0.25;
-        frc::SmartDashboard::PutNumber("OperatorCtlr LeftY", opctlr_left_y);
-        m_elevator.setSpeed(opctlr_left_y);
-    },
-    {&m_elevator}
-  ));
-  
-  // Initialize intake subsystem - nothing to do here right now
-   /* m_intake.SetDefaultCommand(frc2::RunCommand(
-    [this] {
-        // Do stuff
-    },
-    {&m_intake}
-  ));
-  */
-
-  // Set the LEDs to run Green
-  m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
-
   // Set up default drive command
   // The left stick controls translation of the robot.
   // Turning is controlled by the X axis of the right stick.
@@ -90,8 +68,6 @@ RobotContainer::RobotContainer() {
         if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
-        
-
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetY()  * throttle_percentage, OIConstants::kDriveDeadband)},
@@ -108,18 +84,22 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureButtonBindings() {  
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
-  m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
-    [this] {
-        m_intake.rollOut();
-    }
-  ));
+  m_operatorController.LeftBumper().OnTrue(m_intake.rollIn());
 
   // Start / stop intake rollers in the "out" direction
-  m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
-    [this] {
-        m_intake.rollIn();
-    }
-  ));
+  m_operatorController.RightBumper().OnTrue(m_intake.rollOut());
+
+  /* Version A: Stick-based intake deploy/retract 
+  // If right stick Y axis is pressed forward, deploy intake
+  m_rightStickForward.OnTrue(m_intake.deploy());
+
+  // If right stick Y axis is pressed backward, raise intake
+  m_rightStickBackward.OnTrue(m_intake.retract());
+  */
+
+  // Version B: X,Y button intake deploy/retract
+  m_operatorXButton.OnTrue(m_intake.deploy());
+  m_operatorYButton.OnTrue(m_intake.retract());
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
