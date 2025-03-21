@@ -145,6 +145,6 @@ class DriveSubsystem : public frc2::SubsystemBase {
   static constexpr int kUltrasonicPingPort = 1;
   static constexpr int kUlterasonicEchoPort = 0;
  // frc::Ultrasonic m_ultrasonic{kUltrasonicPingPort, kUlterasonicEchoPort};
-   frc::AnalogInput ultrasonic_input(0);
+   frc::AnalogInput ultrasonic_input{0};
    frc::AnalogPotentiometer ultrasonic_pot{0,180,30};
 };
