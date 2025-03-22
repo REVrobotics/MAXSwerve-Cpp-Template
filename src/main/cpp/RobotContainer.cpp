@@ -68,6 +68,7 @@ RobotContainer::RobotContainer() {
         if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
+        frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetY()  * throttle_percentage, OIConstants::kDriveDeadband)},
@@ -76,7 +77,6 @@ RobotContainer::RobotContainer() {
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
             fieldRelative);
-            frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
       },
       {&m_drive}));
 }
