@@ -136,11 +136,11 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         // Pushing buttons 11 and 12 resets the Z axis heading.  This could
         // be useful if the gyro drifts a lot
         //swapped 7 & 8 with 11 & 12
-        if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
+        if (m_driverController.GetRawButtonPressed(7) && m_driverController.GetRawButtonPressed(8))
             { m_drive.ZeroHeading();} 
         
         if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
-            { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
+            { fieldRelative=!fieldRelative;}
 
         
 
