@@ -142,9 +142,8 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
             { fieldRelative=!fieldRelative;}
 
-        
-
         // NOTE: getY() reversed to deal with directional issue
+        frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetY()  * throttle_percentage, OIConstants::kDriveDeadband)},
@@ -153,7 +152,6 @@ m_led.SetDefaultCommand(frc2::RunCommand(
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
             fieldRelative);
-            frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
       },
       {&m_drive}));
 }
