@@ -142,9 +142,12 @@ class DriveSubsystem : public frc2::SubsystemBase {
   // 4 defines the number of modules
   frc::SwerveDriveOdometry<4> m_odometry;
 
-  static constexpr int kUltrasonicPingPort = 1;
-  static constexpr int kUlterasonicEchoPort = 0;
- // frc::Ultrasonic m_ultrasonic{kUltrasonicPingPort, kUlterasonicEchoPort};
-   frc::AnalogInput ultrasonic_input{0};
-   frc::AnalogPotentiometer ultrasonic_pot{0,180,30};
+  // Digital Ultrasonic sensor
+  // static constexpr int kUltrasonicPingPort = 1;
+  // static constexpr int kUlterasonicEchoPort = 0;
+  // frc::Ultrasonic m_ultrasonic{kUltrasonicPingPort, kUlterasonicEchoPort};
+  
+  // Analog ultrasound sensor
+  // frc::AnalogInput ultrasonic_input{0};
+  // frc::AnalogPotentiometer ultrasonic_pot{0,180,30};
 };

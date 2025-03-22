@@ -61,7 +61,6 @@ private:
   frc::SendableChooser<frc2::Command*> m_chooser;
   // Timer
   frc::Timer timer0;
-  frc::AnalogPotentiometer ultrasonic_pot{0,180,0};
   
   void ConfigureButtonBindings();
 };
