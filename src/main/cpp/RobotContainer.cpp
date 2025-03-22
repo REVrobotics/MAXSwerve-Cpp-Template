@@ -157,9 +157,9 @@ m_led.SetDefaultCommand(frc2::RunCommand(
 }
 
 void RobotContainer::ConfigureButtonBindings() {  
-    // Start / stop intake rollers in the "in" direction
-   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
-   m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
+  // Start / stop intake rollers in the "in" direction
+  // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
+  m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
     [this] {
         m_intake.rollOut();
     }

@@ -78,9 +78,9 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
                     units::degree_t{-navx.GetAngle()}}))
           : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
           
-  frc::SmartDashboard::PutNumber("DriveTrain X Speed Delivered", xSpeedDelivered);
-  frc::SmartDashboard::PutNumber("DriveTrain Y Speed Delivered", ySpeedDelivered);
-  frc::SmartDashboard::PutNumber("DriveTrain Rotation Delivered", rotDelivered);
+  frc::SmartDashboard::PutNumber("DriveTrain X Speed Delivered", xSpeedDelivered.value());
+  frc::SmartDashboard::PutNumber("DriveTrain Y Speed Delivered", ySpeedDelivered.value());
+  frc::SmartDashboard::PutNumber("DriveTrain Rotation Delivered", rotDelivered.value());
   // frc::SmartDashboard::PutNumber("Navx Angle", navx.GetAngle());
   // frc::SmartDashboard::PutNumber("Swerve Field Relative", fieldRelative);
   

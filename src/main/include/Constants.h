@@ -139,9 +139,3 @@ namespace OIConstants {
     constexpr double kDriveDeadband = 0.09; //og = 0.07
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
-
-namespace ShooterSubsystemConstants {
-    // TODO - Set actual CAN ID
-    constexpr int kShooterCANId = 97;
-}
-
