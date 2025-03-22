@@ -27,7 +27,7 @@ DriveSubsystem::DriveSubsystem()
       m_odometry{kDriveKinematics,
                  frc::Rotation2d(units::radian_t{
                      //-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
-                     units::degree_t{navx.GetAngle()-90}}), //-navx
+                     units::degree_t{-navx.GetAngle()}}), //-navx
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
                  frc::Pose2d{}} {
@@ -51,7 +51,7 @@ void DriveSubsystem::Periodic() {
   // Implementation of subsystem periodic method goes here.
   m_odometry.Update(frc::Rotation2d(units::radian_t{
                        // -m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
-                       units::degree_t{-navx.GetAngle() -90}}),
+                       units::degree_t{-navx.GetAngle()}}),
                     {m_frontLeft.GetPosition(), m_rearLeft.GetPosition(),
                      m_frontRight.GetPosition(), m_rearRight.GetPosition()});
 }
@@ -69,14 +69,16 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
       rot.value() * DriveConstants::kMaxAngularSpeed;
 
   auto states = kDriveKinematics.ToSwerveModuleStates(
-      fieldRelative
+      false
           ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 frc::Rotation2d(units::radian_t{
                     //-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}))
-                    units::degree_t{-navx.GetAngle()-90}}))
+                    units::degree_t{-navx.GetAngle()}}))
           : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
 
+  frc::SmartDashboard::PutNumber("Navx Angle", navx.GetAngle());
+  frc::SmartDashboard::PutNumber("Swerve Field Relative", fieldRelative);
   kDriveKinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
 
   auto [fl, fr, bl, br] = states;
@@ -119,7 +121,7 @@ units::degree_t DriveSubsystem::GetHeading() {
 
   return frc::Rotation2d(
             // units::radian_t{-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}).Degrees();
-            units::radian_t{units::degree_t{-navx.GetAngle()-90}}).Degrees();
+            units::radian_t{units::degree_t{-navx.GetAngle()}}).Degrees();
           
 }
       

@@ -36,7 +36,7 @@ RobotContainer::RobotContainer() {
   // Configure the button bindings
   ConfigureButtonBindings();
   timer0.Reset();
-  fieldRelative=true;
+  fieldRelative=false;
 
   // Initialize elevator and set to be controlled by Operator XBoxController Left stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(
@@ -139,7 +139,7 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         if (m_driverController.GetRawButton(7) && m_driverController.GetRawButton(8))
             { m_drive.ZeroHeading();} 
         
-        if (m_driverController.GetRawButton(11) && m_driverController.GetRawButton(12))
+        if (m_driverController.GetRawButtonPressed(11) && m_driverController.GetRawButtonPressed(12))
             { fieldRelative=!fieldRelative;} //fix me maybe { m_drive.fieldRelative();}
 
         
@@ -147,12 +147,13 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         // NOTE: getY() reversed to deal with directional issue
         m_drive.Drive(
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetX()  * throttle_percentage, OIConstants::kDriveDeadband)},
+                m_driverController.GetY()  * throttle_percentage, OIConstants::kDriveDeadband)},
             -units::meters_per_second_t{frc::ApplyDeadband(
-                m_driverController.GetY() * throttle_percentage , OIConstants::kDriveDeadband)},    
+                m_driverController.GetX() * throttle_percentage , OIConstants::kDriveDeadband)},    
             -units::radians_per_second_t{frc::ApplyDeadband(
                 m_driverController.GetTwist() * throttle_percentage, OIConstants::kDriveDeadband)},
-            true);
+            fieldRelative);
+            frc::SmartDashboard::PutNumber("Field Relative", fieldRelative);
       },
       {&m_drive}));
 }
@@ -160,20 +161,27 @@ m_led.SetDefaultCommand(frc2::RunCommand(
 void RobotContainer::ConfigureButtonBindings() {  
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
-  m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
-    [this] {
-        m_intake.rollOut();
-    }
-  ));
+  m_operatorController.LeftBumper().OnTrue(m_intake.rollIn());
 
   // Start / stop intake rollers in the "out" direction
-  m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
-    [this] {
-        m_intake.rollIn();
-    }
-  ));
+  m_operatorController.RightBumper().OnTrue(m_intake.rollOut());
+
+  /* Version A: Stick-based intake deploy/retract 
+  // If right stick Y axis is pressed forward, deploy intake
+  m_rightStickForward.OnTrue(m_intake.deploy());
+
+  // If right stick Y axis is pressed backward, raise intake
+  m_rightStickBackward.OnTrue(m_intake.retract());
+  */
+
+  // Version B: X,Y button intake deploy/retract
+  m_operatorXButton.OnTrue(m_intake.deploy());
+  m_operatorYButton.OnTrue(m_intake.retract());
 }
 frc2::Command* RobotContainer::GetAutonomousCommand() {
+    // Raise the elevator
+    m_elevator.setSpeed(1);
+
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
                                AutoConstants::kMaxAcceleration/2);
@@ -187,14 +195,14 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
       //WF- Keeping this example waypoint code in case we need to use something like
       // this in the future.  It is completely useless for now since we want to move in a 
       // straight line
-      {frc::Translation2d{0.25_m, 0_m},
-      frc::Translation2d{0.5_m, 0_m}},
+      {frc::Translation2d{1_m, 0_m},
+      frc::Translation2d{2_m, 0_m}},
       // {},  // No internal waypoints (empty vector)
       // Endpoint 1 meter from where we started.  This is enough distance to exit the starting zone and 
       // earn some points
-      frc::Pose2d{5.87_m, 0_m, 0_deg}, 
+      frc::Pose2d{3_m, 0_m, 0_deg}, 
       // Testing pose (short distance) = 1_m, 0_m, 0_deg
-      // Josephine & Will's numbers = 4.5_m, 0_m, 0_deg
+      // Josephine & Will's numbers = 3_m, 0_m, 0_deg
       // Phil's numbers based on Game Manual = 5.87_m, 0_m, 0_deg
       
       config);
@@ -219,9 +227,12 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Run swerveControllerCommand above to drive the trajectory, 
   // then run InstantCommand to stop
   return new frc2::SequentialCommandGroup(
+      frc2::InstantCommand(
+        [this]() { m_elevator.runForTime(units::second_t{4}, 1); }
+      ),
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
-          [this]() { m_drive.Drive(1_mps, 1_mps, 0_rad_per_s, false); }), 
+          [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }), 
       frc2::InstantCommand(
           [this]() { m_intake.rollOut(); })
           );
