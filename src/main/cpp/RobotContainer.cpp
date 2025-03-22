@@ -84,22 +84,18 @@ RobotContainer::RobotContainer() {
 void RobotContainer::ConfigureButtonBindings() {  
   // Start / stop intake rollers in the "in" direction
   // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
-  m_operatorController.LeftBumper().OnTrue(m_intake.rollIn());
+  m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
+    [this] {
+        m_intake.rollOut();
+    }
+  ));
 
   // Start / stop intake rollers in the "out" direction
-  m_operatorController.RightBumper().OnTrue(m_intake.rollOut());
-
-  /* Version A: Stick-based intake deploy/retract 
-  // If right stick Y axis is pressed forward, deploy intake
-  m_rightStickForward.OnTrue(m_intake.deploy());
-
-  // If right stick Y axis is pressed backward, raise intake
-  m_rightStickBackward.OnTrue(m_intake.retract());
-  */
-
-  // Version B: X,Y button intake deploy/retract
-  m_operatorXButton.OnTrue(m_intake.deploy());
-  m_operatorYButton.OnTrue(m_intake.retract());
+  m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
+    [this] {
+        m_intake.rollIn();
+    }
+  ));
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
