@@ -47,6 +47,15 @@ void ElevatorSubsystem::runForTime(units::second_t seconds, double speed){
     setSpeed(0);
 }
 
+void ElevatorSubsystem::autoRaise(){
+    // Raise the elevator for configured seconds
+    m_elevatorTimer.Start();
+    while(m_elevatorTimer.HasElapsed(m_raiseTime)){
+      setSpeed(0.75);
+    }
+    setSpeed(0);
+}
+
 
 // Package the setSpeed method for use as a Command
 frc2::CommandPtr ElevatorSubsystem::runSetSpeed(double speed) {

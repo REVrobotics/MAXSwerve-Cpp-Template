@@ -216,12 +216,14 @@ void RobotContainer::ConfigureButtonBindings() {
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
+    /*
     // Raise the elevator for 2 seconds
     m_elevator.m_elevatorTimer.Start();
     while(m_elevator.m_elevatorTimer.Get() <  two_seconds){
       m_elevator.setSpeed(1);
     }
     m_elevator.setSpeed(0);
+    */
 
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,
@@ -268,13 +270,12 @@ frc2::Command* RobotContainer::GetAutonomousCommand() {
   // Run swerveControllerCommand above to drive the trajectory, 
   // then run InstantCommand to stop
   return new frc2::SequentialCommandGroup(
-      frc2::InstantCommand(
-        [this]() { m_elevator.runForTime(units::second_t{4}, 1); }
-      ),
       std::move(swerveControllerCommand),
       frc2::InstantCommand(
           [this]() { m_drive.Drive(3_mps, 3_mps, 0_rad_per_s, false); }), 
       frc2::InstantCommand(
+        [this]() { m_elevator.autoRaise();}),
+      frc2::InstantCommand(
           [this]() { m_intake.rollOut(); })
-          );
+  );
 }

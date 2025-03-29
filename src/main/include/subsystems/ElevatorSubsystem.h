@@ -26,6 +26,7 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         // Need method to raise/lower (move!) elevator (positive == up, negative == down)
         void setSpeed(double speed);
         void runForTime(units::second_t seconds, double speed);
+        void autoRaise();
 
         /***
          * Methods that return a CommandPtr to a thing that does the thing
@@ -56,5 +57,6 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         // Need one or two Limit switches to tell us when the elevator needs to stop at the top/bottom
         frc::DigitalInput m_upperLimitSwitch {kUpperLimitSwitchChannel};
         frc::DigitalInput m_lowerLimitSwitch {kLowerLimitSwitchChannel};
-
+        
+        units::second_t m_raiseTime{1};
 };
