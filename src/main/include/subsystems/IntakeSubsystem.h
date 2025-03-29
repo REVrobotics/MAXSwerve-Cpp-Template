@@ -17,10 +17,10 @@ class IntakeSubsystem : public frc2::SubsystemBase {
   void Periodic() override;
 
   // Start intake rollers in the "in" direction
-  void rollIn();
+  void rollIn(double motorSpeed = 1.0);
 
   // Start intake rollers in the "out" direction
-  void rollOut();
+  void rollOut(double motorSpeed = 1.0);
 
   // Stop intake rollers
   void stopRollers();

@@ -36,7 +36,9 @@ RobotContainer::RobotContainer() {
   // Configure the button bindings
   ConfigureButtonBindings();
   timer0.Reset();
+  // A few control variables
   fieldRelative=false;
+  controllerMode='j'; // 'j' for josephine toggle bumpers, 'a' for avi hold bumpers
 
   // Initialize elevator and set to be controlled by Operator XBoxController Left stick
   m_elevator.SetDefaultCommand(frc2::RunCommand(
@@ -163,16 +165,55 @@ void RobotContainer::ConfigureButtonBindings() {
    // OnTrue args should be Command - convert m_intake.rollIn() to command created by StartEnd?
    m_operatorController.LeftBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollOut();
+        m_intake.rollOut(1.0);
     }
   ));
+  if(controllerMode == 'a'){
+    m_operatorController.LeftBumper().OnFalse(m_intake.RunOnce(
+      [this] {
+        m_intake.rollOut(1.0);
+      }
+    ));
+  }
 
   // Start / stop intake rollers in the "out" direction
   m_operatorController.RightBumper().OnTrue(m_intake.RunOnce(
     [this] {
-        m_intake.rollIn();
+        m_intake.rollIn(1.0);
     }
   ));
+  if(controllerMode == 'a'){
+    m_operatorController.RightBumper().OnFalse(m_intake.RunOnce(
+        [this] {
+            m_intake.rollIn(1.0);
+        }
+    ));
+  }
+  // For loading, use the Triggers at 1/2 speed
+  m_operatorController.LeftTrigger().OnTrue(m_intake.RunOnce(
+    [this] {
+        m_intake.rollOut(0.5);
+    }
+  ));
+  if(controllerMode == 'a'){
+    m_operatorController.LeftTrigger().OnFalse(m_intake.RunOnce(
+        [this] {
+            m_intake.rollOut(0.5);
+        }
+        ));
+  }
+  m_operatorController.RightTrigger().OnTrue(m_intake.RunOnce(
+    [this] {
+        m_intake.rollIn(0.5);
+    }
+  ));
+  if(controllerMode == 'a'){
+    m_operatorController.RightTrigger().OnFalse(m_intake.RunOnce(
+        [this] {
+            m_intake.rollIn(0.5);
+        }
+    ));
+  }  
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {

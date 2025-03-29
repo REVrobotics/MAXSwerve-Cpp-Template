@@ -51,6 +51,7 @@ private:
   double button3_result;
   double throttle_percentage;
   bool fieldRelative;
+  char controllerMode; // control whether bumpers toggle intake or are held to run intake
   // The robot's subsystems and commands are defined here...
   // The robot's subsystems
   DriveSubsystem m_drive;
