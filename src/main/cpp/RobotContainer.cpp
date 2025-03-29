@@ -18,6 +18,7 @@
 #include <frc2/command/button/JoystickButton.h>
 #include <frc2/command/Subsystem.h>
 #include <units/angle.h>
+#include <units/time.h>
 #include <units/velocity.h>
 #include <frc/smartdashboard/SmartDashboard.h>
 #include <utility>
@@ -215,8 +216,12 @@ void RobotContainer::ConfigureButtonBindings() {
 }
 
 frc2::Command* RobotContainer::GetAutonomousCommand() {
-    // Raise the elevator
-    m_elevator.setSpeed(1);
+    // Raise the elevator for 2 seconds
+    m_elevator.m_elevatorTimer.Start();
+    while(m_elevator.m_elevatorTimer.Get() <  two_seconds){
+      m_elevator.setSpeed(1);
+    }
+    m_elevator.setSpeed(0);
 
   // Set up config for trajectory
   frc::TrajectoryConfig config(AutoConstants::kMaxSpeed/2,

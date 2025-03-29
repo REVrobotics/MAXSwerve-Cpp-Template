@@ -3,6 +3,7 @@
 #pragma once
 
 #include <frc/DigitalInput.h>
+#include <frc/Timer.h>
 #include <frc2/command/SubsystemBase.h>
 #include <rev/SparkLowLevel.h>
 #include <rev/SparkMax.h>
@@ -32,6 +33,9 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc2::CommandPtr runSetSpeed(double speed);
 
         // Possible future methods to move to preset positions: trough, first coral, 2nd coral, receive-from-human-player
+
+        // Need a Timer to tell us how long to run the Elevator
+        frc::Timer m_elevatorTimer{};
 
     private:
         /***
