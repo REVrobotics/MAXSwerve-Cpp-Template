@@ -58,5 +58,5 @@ class ElevatorSubsystem : public frc2::SubsystemBase {
         frc::DigitalInput m_upperLimitSwitch {kUpperLimitSwitchChannel};
         frc::DigitalInput m_lowerLimitSwitch {kLowerLimitSwitchChannel};
         
-        units::second_t m_raiseTime{1};
+        units::second_t m_raiseTime{1.25};
 };

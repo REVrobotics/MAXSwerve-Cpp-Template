@@ -45,6 +45,7 @@ RobotContainer::RobotContainer() {
   m_elevator.SetDefaultCommand(frc2::RunCommand(
     [this] {
         double opctlr_left_y = -m_operatorController.GetLeftY() * 0.25;
+        if (opctlr_left_y == 0){ opctlr_left_y = 0.2; } // elevator hold speed
         frc::SmartDashboard::PutNumber("OperatorCtlr LeftY", opctlr_left_y);
         m_elevator.setSpeed(opctlr_left_y);
     },
@@ -126,8 +127,6 @@ m_led.SetDefaultCommand(frc2::RunCommand(
         // frc::SmartDashboard::PutNumber("Adjusted Throttle", button3_result);
         throttle_percentage = button3_result * 0.5;
         SmartDashboard::PutNumber("Throttle2",throttle_percentage);
-
-
 
         // Below a certain percentage the robot won't move at all.  Don't
         // let the throttle below this value.

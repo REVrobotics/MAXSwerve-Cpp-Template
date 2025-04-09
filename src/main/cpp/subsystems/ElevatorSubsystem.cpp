@@ -20,6 +20,7 @@ void ElevatorSubsystem::Periodic(){
 
 // Set the Elevator motor speeds to raise or lower
 void ElevatorSubsystem::setSpeed(double speed){
+    double elevator_hold_speed = 0.1;
     // Going up, speed is positive, going down speed is negative
     if (speed > 0){
         // Limit switches return false when closed/triggered.
@@ -50,7 +51,7 @@ void ElevatorSubsystem::runForTime(units::second_t seconds, double speed){
 void ElevatorSubsystem::autoRaise(){
     // Raise the elevator for configured seconds
     m_elevatorTimer.Start();
-    while(m_elevatorTimer.HasElapsed(m_raiseTime)){
+    while(!m_elevatorTimer.HasElapsed(m_raiseTime)){
       setSpeed(0.75);
     }
     setSpeed(0);
