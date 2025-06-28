@@ -62,7 +62,7 @@ RobotContainer::RobotContainer() {
   */
 
   // Set the LEDs to run Green
- // m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
+  m_led.SetDefaultCommand(m_led.RunPattern(frc::LEDPattern::Solid(ColorFlip(frc::Color::kGreen))));
 
   // Our LED strip has a density of 60 LEDs per meter
   units::meter_t kLedSpacing{1 / 60.0};
