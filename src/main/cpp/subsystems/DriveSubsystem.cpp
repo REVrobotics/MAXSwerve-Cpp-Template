@@ -1,4 +1,4 @@
-// Copyright (c) FIRST and other WPILib contributors.
+// Copyright (cterOfRotation) FIRST and other WPILib contributors.
 // Open Source Software; you can modify and/or share it under the terms of
 // the WPILib BSD license file in the root directory of this project.
 
@@ -9,6 +9,7 @@
 #include <units/angle.h>
 #include <units/angular_velocity.h>
 #include <units/velocity.h>
+#include <frc/smartdashboard/SmartDashboard.h>
 
 #include "Constants.h"
 
@@ -25,19 +26,32 @@ DriveSubsystem::DriveSubsystem()
                   kRearRightChassisAngularOffset},
       m_odometry{kDriveKinematics,
                  frc::Rotation2d(units::radian_t{
-                     m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
+                     //-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
+                     units::degree_t{-navx.GetAngle()}}), //-navx
                  {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
                   m_rearLeft.GetPosition(), m_rearRight.GetPosition()},
                  frc::Pose2d{}} {
   // Usage reporting for MAXSwerve template
-  HAL_Report(HALUsageReporting::kResourceType_RobotDrive,
-             HALUsageReporting::kRobotDriveSwerve_MaxSwerve);
+  //HAL_Report(HALUsageReporting::kResourceType_RobotDrive,
+  //           HALUsageReporting::kRobotDriveSwerve_MaxSwerve);
 }
 
 void DriveSubsystem::Periodic() {
+// Digital ultrasound rangefinder - WF 
+// units::meter_t ultra_measurement = m_ultrasonic.GetRange();
+// frc::SmartDashboard::PutNumber("ultrasonicmeasurement", double(ultra_measurement));
+// units::millimeter_t filteredMeasurement = m_filter.Calculate(measurement)
+
+  frc::SmartDashboard::PutNumber("MXP Gyro Angle", -navx.GetAngle());
+  // frc::SmartDashboard::PutNumber("ADIS16470 Gyro Angle",  -m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ).value());
+  
+  frc::SmartDashboard::PutNumber("MXP Gyro Turn Rate", navx.GetRate());
+  // frc::SmartDashboard::PutNumber("ADIS16470 Gyro Turn Rate", m_gyro.GetRate(frc::ADIS16470_IMU::IMUAxis::kZ).value());
+
   // Implementation of subsystem periodic method goes here.
   m_odometry.Update(frc::Rotation2d(units::radian_t{
-                        m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
+                       // -m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}),
+                       units::degree_t{-navx.GetAngle()}}),
                     {m_frontLeft.GetPosition(), m_rearLeft.GetPosition(),
                      m_frontRight.GetPosition(), m_rearRight.GetPosition()});
 }
@@ -54,14 +68,22 @@ void DriveSubsystem::Drive(units::meters_per_second_t xSpeed,
   units::radians_per_second_t rotDelivered =
       rot.value() * DriveConstants::kMaxAngularSpeed;
 
+  // fieldRelative is hardwired to false at the moment
   auto states = kDriveKinematics.ToSwerveModuleStates(
-      fieldRelative
+      false
           ? frc::ChassisSpeeds::FromFieldRelativeSpeeds(
                 xSpeedDelivered, ySpeedDelivered, rotDelivered,
                 frc::Rotation2d(units::radian_t{
-                    m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}))
+                    //-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}))
+                    units::degree_t{-navx.GetAngle()}}))
           : frc::ChassisSpeeds{xSpeedDelivered, ySpeedDelivered, rotDelivered});
-
+          
+  frc::SmartDashboard::PutNumber("DriveTrain X Speed Delivered", xSpeedDelivered.value());
+  frc::SmartDashboard::PutNumber("DriveTrain Y Speed Delivered", ySpeedDelivered.value());
+  frc::SmartDashboard::PutNumber("DriveTrain Rotation Delivered", rotDelivered.value());
+  // frc::SmartDashboard::PutNumber("Navx Angle", navx.GetAngle());
+  // frc::SmartDashboard::PutNumber("Swerve Field Relative", fieldRelative);
+  
   kDriveKinematics.DesaturateWheelSpeeds(&states, DriveConstants::kMaxSpeed);
 
   auto [fl, fr, bl, br] = states;
@@ -100,16 +122,23 @@ void DriveSubsystem::ResetEncoders() {
   m_rearRight.ResetEncoders();
 }
 
-units::degree_t DriveSubsystem::GetHeading() const {
-  return frc::Rotation2d(
-             units::radian_t{m_gyro.GetAngle(frc::ADIS16470_IMU::IMUAxis::kZ)})
-      .Degrees();
-}
+units::degree_t DriveSubsystem::GetHeading() {
 
-void DriveSubsystem::ZeroHeading() { m_gyro.Reset(); }
+  return frc::Rotation2d(
+            // units::radian_t{-m_gyro.getAngle(frc::ADIS16470_IMU::IMUAxis::kZ)}).Degrees();
+            units::radian_t{units::degree_t{-navx.GetAngle()}}).Degrees();
+          
+}
+      
+       
+      
+
+// void DriveSubsystem::ZeroHeading() { m_gyro.Reset(); }
+void DriveSubsystem::ZeroHeading() { navx.Reset(); }
 
 double DriveSubsystem::GetTurnRate() {
-  return -m_gyro.GetRate(frc::ADIS16470_IMU::IMUAxis::kZ).value();
+  //return -m_gyro.GetRate(frc::ADIS16470_IMU::IMUAxis::kZ).value();
+  return navx.GetRate();
 }
 
 frc::Pose2d DriveSubsystem::GetPose() { return m_odometry.GetPose(); }

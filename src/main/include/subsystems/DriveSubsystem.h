@@ -4,7 +4,9 @@
 
 #pragma once
 
+#include <frc/SPI.h>
 #include <frc/ADIS16470_IMU.h>
+#include <studica/AHRS.h>
 #include <frc/filter/SlewRateLimiter.h>
 #include <frc/geometry/Pose2d.h>
 #include <frc/geometry/Rotation2d.h>
@@ -12,6 +14,9 @@
 #include <frc/kinematics/SwerveDriveKinematics.h>
 #include <frc/kinematics/SwerveDriveOdometry.h>
 #include <frc2/command/SubsystemBase.h>
+#include <frc/Ultrasonic.h>
+#include <frc/AnalogInput.h>
+#include <frc/AnalogPotentiometer.h>
 
 #include "Constants.h"
 #include "MAXSwerveModule.h"
@@ -62,7 +67,7 @@ class DriveSubsystem : public frc2::SubsystemBase {
    *
    * @return the robot's heading in degrees, from 180 to 180
    */
-  units::degree_t GetHeading() const;
+  units::degree_t GetHeading() ;
 
   /**
    * Zeroes the heading of the robot.
@@ -110,9 +115,39 @@ class DriveSubsystem : public frc2::SubsystemBase {
   MAXSwerveModule m_rearRight;
 
   // The gyro sensor
-  frc::ADIS16470_IMU m_gyro;
+  // WF: Commented out all of the ADIS16470 code as we moved to the NavX gyro declared below
+  // To revert back simply uncomment all references to m_gyro here and in DriveSubsystem.cpp
+ //frc::ADIS16470_IMU m_gyro;
+  
+  // NavX gyro
+  studica::AHRS navx{studica::AHRS::NavXComType::kMXP_SPI};
+
+  // Slew rate filter variables for controlling lateral acceleration
+  double m_currentRotation = 0.0;
+  double m_currentTranslationDir = 0.0;
+  double m_currentTranslationMag = 0.0;
+
+  frc::SlewRateLimiter<units::scalar> m_magLimiter{
+      DriveConstants::kMagnitudeSlewRate / 1_s};
+  frc::SlewRateLimiter<units::scalar> m_rotLimiter{
+      DriveConstants::kRotationalSlewRate / 1_s};
+  double m_prevTime = wpi::Now() * 1e-6;
+  // Smart Dashboard Chooser
+  //frc::SendableChooser<std::string> m_chooser;
+  const std::string kAutoNameDefault = "Side starting position autonomous program";
+  const std::string kAutoNameCenter = "Center starting position autonomous program";
+  std::string m_autoSelected;
 
   // Odometry class for tracking robot pose
   // 4 defines the number of modules
   frc::SwerveDriveOdometry<4> m_odometry;
+
+  // Digital Ultrasonic sensor
+  // static constexpr int kUltrasonicPingPort = 1;
+  // static constexpr int kUlterasonicEchoPort = 0;
+  // frc::Ultrasonic m_ultrasonic{kUltrasonicPingPort, kUlterasonicEchoPort};
+  
+  // Analog ultrasound sensor
+  // frc::AnalogInput ultrasonic_input{0};
+  // frc::AnalogPotentiometer ultrasonic_pot{0,180,30};
 };
