@@ -3,7 +3,7 @@
 // the WPILib BSD license file in the root directory of this project.
 
 #include <frc/trajectory/TrapezoidProfile.h>
-#include <rev/CANSparkMax.h>
+#include <rev/SparkMax.h>
 #include <units/acceleration.h>
 #include <units/angular_acceleration.h>
 #include <units/angular_velocity.h>
@@ -40,30 +40,26 @@ constexpr units::meter_t kTrackWidth =
 constexpr units::meter_t kWheelBase =
     0.629_m;  // Distance between centers of front and back wheels on robot
 
-// Angular offsets of the modules relative to the chassis in radians
+// Angular offsets of the modules relative to the chassis in pi
 constexpr double kFrontLeftChassisAngularOffset = -std::numbers::pi / 2;
 constexpr double kFrontRightChassisAngularOffset = 0;
 constexpr double kRearLeftChassisAngularOffset = std::numbers::pi;
 constexpr double kRearRightChassisAngularOffset = std::numbers::pi / 2;
 
 // SPARK MAX CAN IDs
-constexpr int kFrontLeftDrivingCanId = 7;//9; 
-constexpr int kRearLeftDrivingCanId = 3;//1; 
-constexpr int kFrontRightDrivingCanId = 9;//7; 
-constexpr int kRearRightDrivingCanId = 1;//3; 
+constexpr int kFrontLeftDrivingCanId = 7;
+constexpr int kRearLeftDrivingCanId = 3; 
+constexpr int kFrontRightDrivingCanId = 6; 
+constexpr int kRearRightDrivingCanId = 1; 
 
-constexpr int kFrontLeftTurningCanId = 8;//5; 
-constexpr int kRearLeftTurningCanId = 4;//2;
-constexpr int kFrontRightTurningCanId = 5;//8;
-constexpr int kRearRightTurningCanId = 2;//4;
+constexpr int kFrontLeftTurningCanId = 8; 
+constexpr int kRearLeftTurningCanId = 4;
+constexpr int kFrontRightTurningCanId = 5;
+constexpr int kRearRightTurningCanId = 2;
 
 }  // namespace DriveConstants
 
 namespace ModuleConstants {
-// Invert the turning encoder, since the output shaft rotates in the opposite
-// direction of the steering motor in the MAXSwerve Module.
-constexpr bool kTurningEncoderInverted = true;
-
 // The MAXSwerve module can be configured with one of three pinion gears: 12T,
 // 13T, or 14T. This changes the drive speed of the module (a pinion gear with
 // more teeth will result in a robot that drives faster).
@@ -113,10 +109,10 @@ constexpr double kTurningFF = 0;
 constexpr double kTurningMinOutput = -1;
 constexpr double kTurningMaxOutput = 1;
 
-constexpr rev::CANSparkMax::IdleMode kDrivingMotorIdleMode =
-    rev::CANSparkMax::IdleMode::kBrake;
-constexpr rev::CANSparkMax::IdleMode kTurningMotorIdleMode =
-    rev::CANSparkMax::IdleMode::kBrake;
+constexpr rev::spark::SparkMax::IdleMode kDrivingMotorIdleMode =
+    rev::spark::SparkMax::IdleMode::kBrake;
+constexpr rev::spark::SparkMax::IdleMode kTurningMotorIdleMode =
+    rev::spark::SparkMax::IdleMode::kBrake;
 
 constexpr units::ampere_t kDrivingMotorCurrentLimit = 40_A;
 constexpr units::ampere_t kTurningMotorCurrentLimit = 20_A;
@@ -143,15 +139,3 @@ namespace OIConstants {
     constexpr double kDriveDeadband = 0.09; //og = 0.07
     constexpr int kTurboThrottlePercentage = 0.5; // Not an interface constant, probably belongs in different namespace
 }  // namespace OIConstants
-
-namespace IntakeSubsystemConstants {
-    // TODO - set actual CAN IDs
-    constexpr int kIntakeRaiseLowerCANId = 10;
-    constexpr int kIntakeRollerCANId = 98;
-    // Also look in IntakeSubsystem.h
-}
-
-namespace ShooterSubsystemConstants {
-    // TODO - Set actual CAN ID
-    constexpr int kShooterCANId = 97;
-}
