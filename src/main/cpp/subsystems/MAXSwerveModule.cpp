@@ -55,8 +55,8 @@ void MAXSwerveModule::SetDesiredState(
   correctedDesiredState.Optimize(
       frc::Rotation2d(units::radian_t{m_turningAbsoluteEncoder.GetPosition()}));
 
-  m_drivingClosedLoopController.SetSetpoint(
-      (double)correctedDesiredState.speed, SparkMax::ControlType::kVelocity);
+  m_drivingClosedLoopController.SetSetpoint((double)correctedDesiredState.speed,
+                                            SparkMax::ControlType::kVelocity);
   m_turningClosedLoopController.SetSetpoint(
       correctedDesiredState.angle.Radians().value(),
       SparkMax::ControlType::kPosition);

@@ -31,8 +31,7 @@ class MAXSwerveModule {
         // These are example gains you may need to them for your own robot!
         .Pid(0.04, 0, 0)
         .OutputRange(-1, 1)
-        .feedForward
-            .kV(drivingVelocityFeedForward);
+        .feedForward.kV(drivingVelocityFeedForward);
 
     return drivingConfig;
   }
@@ -51,12 +50,13 @@ class MAXSwerveModule {
         // Invert the turning encoder, since the output shaft rotates in the
         // opposite direction of the steering motor in the MAXSwerve Module.
         .Inverted(true)
-        .PositionConversionFactor(turningFactor)          // radians
-        .VelocityConversionFactor(turningFactor / 60.0)   // radians per second
-        // This applies to REV Through Bore Encoder V2 (use REV_ThroughBoreEncoder for V1):
+        .PositionConversionFactor(turningFactor)         // radians
+        .VelocityConversionFactor(turningFactor / 60.0)  // radians per second
+        // This applies to REV Through Bore Encoder V2 (use
+        // REV_ThroughBoreEncoder for V1):
         .Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoderV2());
 
-        turningConfig.closedLoop
+    turningConfig.closedLoop
         .SetFeedbackSensor(FeedbackSensor::kAbsoluteEncoder)
         // These are example gains you may need to them for your own robot!
         .Pid(1, 0, 0)
