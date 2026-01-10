@@ -18,11 +18,11 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
   // applying the configuration to bring the SPARK to a known good state.
   // Persist the settings to the SPARK to avoid losing them on a power cycle.
   m_drivingSpark.Configure(Configs::MAXSwerveModule::DrivingConfig(),
-                           SparkBase::ResetMode::kResetSafeParameters,
-                           SparkBase::PersistMode::kPersistParameters);
+                           rev::ResetMode::kResetSafeParameters,
+                           rev::PersistMode::kPersistParameters);
   m_turningSpark.Configure(Configs::MAXSwerveModule::TurningConfig(),
-                           SparkBase::ResetMode::kResetSafeParameters,
-                           SparkBase::PersistMode::kPersistParameters);
+                           rev::ResetMode::kResetSafeParameters,
+                           rev::PersistMode::kPersistParameters);
 
   m_chassisAngularOffset = chassisAngularOffset;
   m_desiredState.angle =
@@ -55,9 +55,9 @@ void MAXSwerveModule::SetDesiredState(
   correctedDesiredState.Optimize(
       frc::Rotation2d(units::radian_t{m_turningAbsoluteEncoder.GetPosition()}));
 
-  m_drivingClosedLoopController.SetReference(
-      (double)correctedDesiredState.speed, SparkMax::ControlType::kVelocity);
-  m_turningClosedLoopController.SetReference(
+  m_drivingClosedLoopController.SetSetpoint((double)correctedDesiredState.speed,
+                                            SparkMax::ControlType::kVelocity);
+  m_turningClosedLoopController.SetSetpoint(
       correctedDesiredState.angle.Radians().value(),
       SparkMax::ControlType::kPosition);
 

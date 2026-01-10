@@ -1,4 +1,4 @@
-# MAXSwerve C++ Template v2025.1
+# MAXSwerve C++ Template v2026.0
 
 See [the online changelog](https://github.com/REVrobotics/MAXSwerve-Cpp-Template/blob/main/CHANGELOG.md) for information about updates to the template that may have been released since you created your project.
 
@@ -6,14 +6,14 @@ See [the online changelog](https://github.com/REVrobotics/MAXSwerve-Cpp-Template
 
 A template project for an FRC swerve drivetrain that uses REV MAXSwerve Modules.
 
-Note that this is meant to be used with a drivetrain composed of four MAXSwerve Modules, each configured with two SPARKS MAX, a NEO as the driving motor, a NEO 550 as the turning motor, and a REV Through Bore Encoder as the absolute turning encoder.
+Note that this template is designed for a drivetrain composed of four MAXSwerve Modules, each configured with two SPARKS MAX, a NEO as the driving motor, a NEO 550 as the turning motor, and a REV Through Bore Encoder as the absolute turning encoder. If you are using SPARK Flex for either the drive motor or turning motor, you will need to update the classes accordingly.
 
-To get started, make sure you have calibrated the zero offsets for the absolute encoders in the Hardware Client using the `Absolute Encoder` tab under the associated turning SPARK MAX devices.
+To get started, make sure you have calibrated the zero offsets for the absolute encoders in Hardware Client 2 using the `Absolute Encoder` utility under the associated turning SPARK devices.
 
 ## Prerequisites
 
-* SPARK MAX Firmware v25.0.0
-* REVLib v2025.0.0
+* SPARK MAX Firmware v26.1.0
+* REVLib v2026.0.0
 
 ## Configuration
 

@@ -1,5 +1,13 @@
 # MAXSwerve C++ Template Changelog
 
+## [2026.0] - 2026-01-10
+
+- Updates project for 2026 FRC season
+- Uses REV Through Bore Encoder V2 preset for the absolute encoder config
+- Updates kV (previously velocity feed forward) value for drive motor to adjust for feedforward changes from REVLib 2026
+- Updates `PersistMode` and `ResetMode` imports
+- Updates deprecated `setReference()` to `setSetpoint()`
+
 ## [2025.1] - 2025-01-04
 
 - Updates project for kickoff releases

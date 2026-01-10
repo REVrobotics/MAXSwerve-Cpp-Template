@@ -14,11 +14,12 @@ class MAXSwerveModule {
 
     // Use module constants to calculate conversion factors and feed forward
     // gain.
-    double drivingFactor = ModuleConstants::kWheelDiameter.value() *
-                           std::numbers::pi /
-                           ModuleConstants::kDrivingMotorReduction;
-    double drivingVelocityFeedForward =
-        1 / ModuleConstants::kDriveWheelFreeSpeedRps;
+    constexpr double drivingFactor = ModuleConstants::kWheelDiameter.value() *
+                                     std::numbers::pi /
+                                     ModuleConstants::kDrivingMotorReduction;
+    constexpr double nominalVoltage = 12.0;
+    constexpr double drivingVelocityFeedForward =
+        nominalVoltage / ModuleConstants::kDriveWheelFreeSpeedRps;
 
     drivingConfig.SetIdleMode(SparkBaseConfig::IdleMode::kBrake)
         .SmartCurrentLimit(50);
@@ -26,11 +27,11 @@ class MAXSwerveModule {
         .PositionConversionFactor(drivingFactor)          // meters
         .VelocityConversionFactor(drivingFactor / 60.0);  // meters per second
     drivingConfig.closedLoop
-        .SetFeedbackSensor(ClosedLoopConfig::FeedbackSensor::kPrimaryEncoder)
+        .SetFeedbackSensor(FeedbackSensor::kPrimaryEncoder)
         // These are example gains you may need to them for your own robot!
         .Pid(0.04, 0, 0)
-        .VelocityFF(drivingVelocityFeedForward)
-        .OutputRange(-1, 1);
+        .OutputRange(-1, 1)
+        .feedForward.kV(drivingVelocityFeedForward);
 
     return drivingConfig;
   }
@@ -43,15 +44,20 @@ class MAXSwerveModule {
 
     turningConfig.SetIdleMode(SparkBaseConfig::IdleMode::kBrake)
         .SmartCurrentLimit(20);
+
     turningConfig
         .absoluteEncoder
         // Invert the turning encoder, since the output shaft rotates in the
         // opposite direction of the steering motor in the MAXSwerve Module.
         .Inverted(true)
-        .PositionConversionFactor(turningFactor)          // radians
-        .VelocityConversionFactor(turningFactor / 60.0);  // radians per second
+        .PositionConversionFactor(turningFactor)         // radians
+        .VelocityConversionFactor(turningFactor / 60.0)  // radians per second
+        // This applies to REV Through Bore Encoder V2 (use
+        // REV_ThroughBoreEncoder for V1):
+        .Apply(AbsoluteEncoderConfig::Presets::REV_ThroughBoreEncoderV2());
+
     turningConfig.closedLoop
-        .SetFeedbackSensor(ClosedLoopConfig::FeedbackSensor::kAbsoluteEncoder)
+        .SetFeedbackSensor(FeedbackSensor::kAbsoluteEncoder)
         // These are example gains you may need to them for your own robot!
         .Pid(1, 0, 0)
         .OutputRange(-1, 1)
