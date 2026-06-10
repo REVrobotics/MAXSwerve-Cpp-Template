@@ -4,10 +4,9 @@
 
 #include "Robot.h"
 
-#include <frc/smartdashboard/SmartDashboard.h>
-#include <frc2/command/CommandScheduler.h>
+#include "wpi/commands2/CommandScheduler.hpp"
 
-void Robot::RobotInit() {}
+Robot::Robot() {}
 
 /**
  * This function is called every 20 ms, no matter the mode. Use
@@ -17,7 +16,9 @@ void Robot::RobotInit() {}
  * <p> This runs after the mode specific periodic functions, but before
  * LiveWindow and SmartDashboard integrated updating.
  */
-void Robot::RobotPeriodic() { frc2::CommandScheduler::GetInstance().Run(); }
+void Robot::RobotPeriodic() {
+    wpi::cmd::CommandScheduler::GetInstance().Run();
+}
 
 /**
  * This function is called once each time the robot enters Disabled mode. You
@@ -33,11 +34,11 @@ void Robot::DisabledPeriodic() {}
  * RobotContainer} class.
  */
 void Robot::AutonomousInit() {
-  m_autonomousCommand = m_container.GetAutonomousCommand();
+    m_autonomousCommand = m_container.GetAutonomousCommand();
 
-  if (m_autonomousCommand != nullptr) {
-    frc2::CommandScheduler::GetInstance().Schedule(m_autonomousCommand);
-  }
+    if (m_autonomousCommand) {
+        wpi::cmd::CommandScheduler::GetInstance().Schedule(m_autonomousCommand.value());
+    }
 }
 
 void Robot::AutonomousPeriodic() {}
@@ -47,9 +48,8 @@ void Robot::TeleopInit() {
   // teleop starts running. If you want the autonomous to
   // continue until interrupted by another command, remove
   // this line or comment it out.
-  if (m_autonomousCommand != nullptr) {
-    m_autonomousCommand->Cancel();
-    m_autonomousCommand = nullptr;
+  if (m_autonomousCommand) {
+      m_autonomousCommand->Cancel();
   }
 }
 
@@ -58,11 +58,20 @@ void Robot::TeleopInit() {
  */
 void Robot::TeleopPeriodic() {}
 
-/**
- * This function is called periodically during test mode.
- */
-void Robot::TestPeriodic() {}
+void Robot::UtilityInit() {
+  wpi::cmd::CommandScheduler::GetInstance().CancelAll();
+}
 
-#ifndef RUNNING_FRC_TESTS
-int main() { return frc::StartRobot<Robot>(); }
+/**
+ * This function is called periodically during utility mode.
+ */
+void Robot::UtilityPeriodic() {}
+
+void Robot::SimulationInit() {};
+void Robot::SimulationPeriodic() {};
+
+#ifndef RUNNING_WPILIB_TESTS
+int main() {
+    return wpi::StartRobot<Robot>();
+}
 #endif

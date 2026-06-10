@@ -4,15 +4,11 @@
 
 #pragma once
 
-#include <frc/XboxController.h>
-#include <frc/controller/PIDController.h>
-#include <frc/controller/ProfiledPIDController.h>
-#include <frc/smartdashboard/SendableChooser.h>
-#include <frc2/command/Command.h>
-#include <frc2/command/InstantCommand.h>
-#include <frc2/command/PIDCommand.h>
-#include <frc2/command/ParallelRaceGroup.h>
-#include <frc2/command/RunCommand.h>
+#include <wpi/commands2/Command.hpp>
+#include <wpi/commands2/CommandPtr.hpp>
+#include <wpi/driverstation/NiDsXboxController.hpp>
+#include <wpi/smartdashboard/SendableChooser.hpp>
+#include <wpi/units/time.hpp>
 
 #include "Constants.h"
 #include "subsystems/DriveSubsystem.h"
@@ -26,13 +22,20 @@
  */
 class RobotContainer {
  public:
-  RobotContainer();
+  RobotContainer() = delete;
 
-  frc2::Command* GetAutonomousCommand();
+  /**
+   * @param period Time period between calls to Periodic() functions;
+   */
+  explicit RobotContainer(wpi::units::second_t period);
+
+  wpi::cmd::CommandPtr GetAutonomousCommand();
 
  private:
   // The driver's controller
-  frc::XboxController m_driverController{OIConstants::kDriverControllerPort};
+  wpi::NiDsXboxController m_driverController{OIConstants::kDriverControllerPort};
+
+  const wpi::units::second_t m_period;
 
   // The robot's subsystems and commands are defined here...
 
@@ -40,7 +43,7 @@ class RobotContainer {
   DriveSubsystem m_drive;
 
   // The chooser for the autonomous routines
-  frc::SendableChooser<frc2::Command*> m_chooser;
+  wpi::SendableChooser<wpi::cmd::Command*> m_chooser;
 
   void ConfigureButtonBindings();
 };

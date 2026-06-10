@@ -4,27 +4,34 @@
 
 #pragma once
 
-#include <frc/TimedRobot.h>
-#include <frc2/command/Command.h>
+#include <optional>
 
 #include "RobotContainer.h"
+#include <wpi/commands2/CommandPtr.hpp>
+#include <wpi/framework/TimedRobot.hpp>
 
-class Robot : public frc::TimedRobot {
+class Robot : public wpi::TimedRobot {
  public:
-  void RobotInit() override;
+  Robot();
   void RobotPeriodic() override;
-  void DisabledInit() override;
-  void DisabledPeriodic() override;
+
   void AutonomousInit() override;
   void AutonomousPeriodic() override;
+
   void TeleopInit() override;
   void TeleopPeriodic() override;
-  void TestPeriodic() override;
+
+  void DisabledInit() override;
+  void DisabledPeriodic() override;
+
+  void UtilityInit() override;
+  void UtilityPeriodic() override;
+
+  void SimulationInit() override;
+  void SimulationPeriodic() override;
 
  private:
-  // Have it null by default so that if testing teleop it
-  // doesn't have undefined behavior and potentially crash.
-  frc2::Command* m_autonomousCommand = nullptr;
+  std::optional<wpi::cmd::CommandPtr> m_autonomousCommand;
 
-  RobotContainer m_container;
+  RobotContainer m_container{GetPeriod()};
 };

@@ -4,9 +4,9 @@
 
 #pragma once
 
-#include <frc/geometry/Rotation2d.h>
-#include <frc/kinematics/SwerveModulePosition.h>
-#include <frc/kinematics/SwerveModuleState.h>
+#include <wpi/math/geometry/Rotation2d.hpp>
+#include <wpi/math/kinematics/SwerveModulePosition.hpp>
+#include <wpi/math/kinematics/SwerveModuleVelocity.hpp>
 #include <rev/SparkAbsoluteEncoder.h>
 #include <rev/SparkClosedLoopController.h>
 #include <rev/SparkMax.h>
@@ -22,29 +22,29 @@ class MAXSwerveModule {
    * MAXSwerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    */
-  MAXSwerveModule(int driveCANId, int turningCANId,
+  MAXSwerveModule(int busCANId, int driveCANId, int turningCANId,
                   double chassisAngularOffset);
 
   /**
-   * Returns the current state of the module.
+   * Returns the current velocity of the module.
    *
-   * @return The current state of the module.
+   * @return The current velocity of the module.
    */
-  frc::SwerveModuleState GetState() const;
+  wpi::math::SwerveModuleVelocity GetVelocity() const;
 
   /**
    * Returns the current position of the module.
    *
    * @return The current position of the module.
    */
-  frc::SwerveModulePosition GetPosition() const;
+  wpi::math::SwerveModulePosition GetPosition() const;
 
   /**
-   * Sets the desired state for the module.
+   * Sets the desired velocity for the module.
    *
-   * @param desiredState Desired state with speed and angle.
+   * @param desiredVelocity Desired velocity with velocity and angle.
    */
-  void SetDesiredState(const frc::SwerveModuleState& state);
+  void SetDesiredVelocity(const wpi::math::SwerveModuleVelocity& desiredVelocity);
 
   /**
    * Zeroes all the SwerveModule encoders.
@@ -65,6 +65,5 @@ class MAXSwerveModule {
       m_turningSpark.GetClosedLoopController();
 
   double m_chassisAngularOffset = 0;
-  frc::SwerveModuleState m_desiredState{units::meters_per_second_t{0.0},
-                                        frc::Rotation2d()};
+  wpi::math::SwerveModuleVelocity m_desiredVelocity{0_mps, wpi::math::Rotation2d()};
 };

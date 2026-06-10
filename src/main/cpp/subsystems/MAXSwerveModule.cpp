@@ -4,16 +4,14 @@
 
 #include "subsystems/MAXSwerveModule.h"
 
-#include <frc/geometry/Rotation2d.h>
-
 #include "Configs.h"
 
 using namespace rev::spark;
 
-MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
+MAXSwerveModule::MAXSwerveModule(const int busCANId, const int drivingCANId, const int turningCANId,
                                  const double chassisAngularOffset)
-    : m_drivingSpark(drivingCANId, SparkMax::MotorType::kBrushless),
-      m_turningSpark(turningCANId, SparkMax::MotorType::kBrushless) {
+    : m_drivingSpark(busCANId, drivingCANId, SparkMax::MotorType::kBrushless),
+      m_turningSpark(busCANId, turningCANId, SparkMax::MotorType::kBrushless) {
   // Apply the respective configurations to the SPARKS. Reset parameters before
   // applying the configuration to bring the SPARK to a known good state.
   // Persist the settings to the SPARK to avoid losing them on a power cycle.
@@ -25,43 +23,49 @@ MAXSwerveModule::MAXSwerveModule(const int drivingCANId, const int turningCANId,
                            rev::PersistMode::kPersistParameters);
 
   m_chassisAngularOffset = chassisAngularOffset;
-  m_desiredState.angle =
-      frc::Rotation2d(units::radian_t{m_turningAbsoluteEncoder.GetPosition()});
+  m_desiredVelocity.angle =
+      wpi::math::Rotation2d(wpi::units::radian_t{m_turningAbsoluteEncoder.GetPosition().Get()});
   m_drivingEncoder.SetPosition(0);
 }
 
-frc::SwerveModuleState MAXSwerveModule::GetState() const {
-  return {units::meters_per_second_t{m_drivingEncoder.GetVelocity()},
-          units::radian_t{m_turningAbsoluteEncoder.GetPosition() -
+wpi::math::SwerveModuleVelocity MAXSwerveModule::GetVelocity() const {
+  return {wpi::units::meters_per_second_t{m_drivingEncoder.GetVelocity().Get()},
+          wpi::units::radian_t{m_turningAbsoluteEncoder.GetPosition().Get() -
                           m_chassisAngularOffset}};
 }
 
-frc::SwerveModulePosition MAXSwerveModule::GetPosition() const {
-  return {units::meter_t{m_drivingEncoder.GetPosition()},
-          units::radian_t{m_turningAbsoluteEncoder.GetPosition() -
+wpi::math::SwerveModulePosition MAXSwerveModule::GetPosition() const {
+  return {wpi::units::meter_t{m_drivingEncoder.GetPosition().Get()},
+          wpi::units::radian_t{m_turningAbsoluteEncoder.GetPosition().Get() -
                           m_chassisAngularOffset}};
 }
 
-void MAXSwerveModule::SetDesiredState(
-    const frc::SwerveModuleState& desiredState) {
+void MAXSwerveModule::SetDesiredVelocity(
+    const wpi::math::SwerveModuleVelocity& desiredVelocity) {
   // Apply chassis angular offset to the desired state.
-  frc::SwerveModuleState correctedDesiredState{};
-  correctedDesiredState.speed = desiredState.speed;
-  correctedDesiredState.angle =
-      desiredState.angle +
-      frc::Rotation2d(units::radian_t{m_chassisAngularOffset});
+  wpi::math::SwerveModuleVelocity correctedDesiredVelocity{};
+  correctedDesiredVelocity.velocity = desiredVelocity.velocity;
+  correctedDesiredVelocity.angle =
+      desiredVelocity.angle +
+      wpi::math::Rotation2d(wpi::units::radian_t{m_chassisAngularOffset});
 
-  // Optimize the reference state to avoid spinning further than 90 degrees.
-  correctedDesiredState.Optimize(
-      frc::Rotation2d(units::radian_t{m_turningAbsoluteEncoder.GetPosition()}));
+  wpi::math::Rotation2d encoderRotation{
+      wpi::units::radian_t{m_turningAbsoluteEncoder.GetPosition().Get()}};
 
-  m_drivingClosedLoopController.SetSetpoint((double)correctedDesiredState.speed,
+  // Optimize the desired velocity to avoid spinning further than 90 degrees,
+  // then scale velocity by cosine of angle error. This scales down movement
+  // perpendicular to the desired direction of travel that can occur when
+  // modules change directions. This results in smoother driving.
+  auto velocity =
+      correctedDesiredVelocity.Optimize(encoderRotation).CosineScale(encoderRotation);
+      
+  m_drivingClosedLoopController.SetSetpoint((double)velocity.velocity,
                                             SparkMax::ControlType::kVelocity);
   m_turningClosedLoopController.SetSetpoint(
-      correctedDesiredState.angle.Radians().value(),
+      velocity.angle.Radians().value(),
       SparkMax::ControlType::kPosition);
 
-  m_desiredState = desiredState;
+  m_desiredVelocity = desiredVelocity;
 }
 
 void MAXSwerveModule::ResetEncoders() { m_drivingEncoder.SetPosition(0); }

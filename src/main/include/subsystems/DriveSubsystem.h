@@ -4,20 +4,21 @@
 
 #pragma once
 
-#include <frc/ADIS16470_IMU.h>
-#include <frc/filter/SlewRateLimiter.h>
-#include <frc/geometry/Pose2d.h>
-#include <frc/geometry/Rotation2d.h>
-#include <frc/kinematics/ChassisSpeeds.h>
-#include <frc/kinematics/SwerveDriveKinematics.h>
-#include <frc/kinematics/SwerveDriveOdometry.h>
-#include <frc2/command/SubsystemBase.h>
+#include <wpi/commands2/SubsystemBase.hpp>
+#include <wpi/hardware/imu/OnboardIMU.hpp>
+#include <wpi/math/geometry/Pose2d.hpp>
+#include <wpi/math/geometry/Translation2d.hpp>
+#include "wpi/math/kinematics/SwerveDriveOdometry.hpp"
+#include <wpi/math/kinematics/SwerveModuleVelocity.hpp>
+#include <wpi/units/time.hpp>
+#include <wpi/util/array.hpp>
 
 #include "Constants.h"
 #include "MAXSwerveModule.h"
 
-class DriveSubsystem : public frc2::SubsystemBase {
+class DriveSubsystem : public wpi::cmd::SubsystemBase {
  public:
+
   DriveSubsystem();
 
   /**
@@ -28,19 +29,22 @@ class DriveSubsystem : public frc2::SubsystemBase {
   // Subsystem methods go here.
 
   /**
-   * Drives the robot at given x, y and theta speeds. Speeds range from [-1, 1]
-   * and the linear speeds have no effect on the angular speed.
+   * Drives the robot at given x, y and theta velocities. Velocities range from [-1, 1]
+   * and the linear velocities have no effect on the angular velocitiy.
    *
-   * @param xSpeed        Speed of the robot in the x direction
+   * @param xSpeed        Velocity of the robot in the x direction
    *                      (forward/backwards).
-   * @param ySpeed        Speed of the robot in the y direction (sideways).
+   * @param ySpeed        Velocity of the robot in the y direction (sideways).
    * @param rot           Angular rate of the robot.
-   * @param fieldRelative Whether the provided x and y speeds are relative to
+   * @param fieldRelative Whether the provided x and y velocities are relative to
    *                      the field.
+   * @param period        The duration of the timestep the velocities should be applied
+   *                      for.
    */
-  void Drive(units::meters_per_second_t xSpeed,
-             units::meters_per_second_t ySpeed, units::radians_per_second_t rot,
-             bool fieldRelative);
+  void Drive(wpi::units::meters_per_second_t xVelocity,
+             wpi::units::meters_per_second_t yVelocity,
+             wpi::units::radians_per_second_t rot, bool fieldRelative,
+             wpi::units::second_t period);
 
   /**
    * Sets the wheels into an X formation to prevent movement.
@@ -55,14 +59,14 @@ class DriveSubsystem : public frc2::SubsystemBase {
   /**
    * Sets the drive MotorControllers to a power from -1 to 1.
    */
-  void SetModuleStates(wpi::array<frc::SwerveModuleState, 4> desiredStates);
+  void SetModuleVelocities(wpi::util::array<wpi::math::SwerveModuleVelocity, 4> desiredVelocities);
 
   /**
    * Returns the heading of the robot.
    *
    * @return the robot's heading in degrees, from 180 to 180
    */
-  units::degree_t GetHeading() const;
+  wpi::units::degree_t GetHeading();
 
   /**
    * Zeroes the heading of the robot.
@@ -81,38 +85,57 @@ class DriveSubsystem : public frc2::SubsystemBase {
    *
    * @return The pose.
    */
-  frc::Pose2d GetPose();
+  wpi::math::Pose2d GetPose();
 
   /**
    * Resets the odometry to the specified pose.
    *
    * @param pose The pose to which to set the odometry.
    */
-  void ResetOdometry(frc::Pose2d pose);
+  void ResetOdometry(const wpi::math::Pose2d& pose);
 
-  frc::SwerveDriveKinematics<4> kDriveKinematics{
-      frc::Translation2d{DriveConstants::kWheelBase / 2,
-                         DriveConstants::kTrackWidth / 2},
-      frc::Translation2d{DriveConstants::kWheelBase / 2,
-                         -DriveConstants::kTrackWidth / 2},
-      frc::Translation2d{-DriveConstants::kWheelBase / 2,
-                         DriveConstants::kTrackWidth / 2},
-      frc::Translation2d{-DriveConstants::kWheelBase / 2,
-                         -DriveConstants::kTrackWidth / 2}};
+  wpi::math::SwerveDriveKinematics<4> kDriveKinematics{
+    m_frontLeftLocation, m_frontRightLocation, m_rearLeftLocation, m_rearRightLocation
+  };
 
  private:
+  wpi::math::Translation2d m_frontLeftLocation{+DriveConstants::kWheelBase / 2,
+                         +DriveConstants::kTrackWidth / 2};
+  wpi::math::Translation2d m_frontRightLocation{+DriveConstants::kWheelBase / 2,
+                         -DriveConstants::kTrackWidth / 2};
+  wpi::math::Translation2d m_rearLeftLocation{-DriveConstants::kWheelBase / 2,
+                         +DriveConstants::kTrackWidth / 2};
+  wpi::math::Translation2d m_rearRightLocation{-DriveConstants::kWheelBase / 2,
+                         -DriveConstants::kTrackWidth / 2};
+
   // Components (e.g. motor controllers and sensors) should generally be
   // declared private and exposed only through public methods.
 
-  MAXSwerveModule m_frontLeft;
-  MAXSwerveModule m_rearLeft;
-  MAXSwerveModule m_frontRight;
-  MAXSwerveModule m_rearRight;
+  MAXSwerveModule m_frontLeft{DriveConstants::kFrontLeftBusId,
+                  DriveConstants::kFrontLeftDrivingCanId,
+                  DriveConstants::kFrontLeftTurningCanId,
+                  DriveConstants::kFrontLeftChassisAngularOffset};
+  MAXSwerveModule m_rearLeft{DriveConstants::kRearLeftBusId,
+                  DriveConstants::kRearLeftDrivingCanId,
+                  DriveConstants::kRearLeftTurningCanId,
+                  DriveConstants::kRearLeftChassisAngularOffset};
+  MAXSwerveModule m_frontRight{DriveConstants::kFrontRightBusId,
+                  DriveConstants::kFrontRightDrivingCanId,
+                  DriveConstants::kFrontRightTurningCanId,
+                  DriveConstants::kFrontRightChassisAngularOffset};
+  MAXSwerveModule m_rearRight{DriveConstants::kRearRightBusId,
+                  DriveConstants::kRearRightDrivingCanId,
+                  DriveConstants::kRearRightTurningCanId,
+                  DriveConstants::kRearRightChassisAngularOffset};
 
   // The gyro sensor
-  frc::ADIS16470_IMU m_gyro;
+  wpi::OnboardIMU m_gyro{wpi::OnboardIMU::MountOrientation::FLAT};
 
   // Odometry class for tracking robot pose
   // 4 defines the number of modules
-  frc::SwerveDriveOdometry<4> m_odometry;
+  wpi::math::SwerveDriveOdometry<4> m_odometry{
+      kDriveKinematics,
+      m_gyro.GetRotation2d(),
+      {m_frontLeft.GetPosition(), m_frontRight.GetPosition(),
+       m_rearLeft.GetPosition(), m_rearRight.GetPosition()}};
 };
